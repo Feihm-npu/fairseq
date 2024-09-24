@@ -1,0 +1,703 @@
+2024-07-10 00:22:51 | INFO | fairseq.distributed.utils | distributed init (rank 0): tcp://localhost:12993
+2024-07-10 00:22:51 | INFO | fairseq.distributed.utils | distributed init (rank 1): tcp://localhost:12993
+2024-07-10 00:22:51 | INFO | fairseq.distributed.utils | distributed init (rank 2): tcp://localhost:12993
+2024-07-10 00:22:51 | INFO | fairseq.distributed.utils | distributed init (rank 3): tcp://localhost:12993
+2024-07-10 00:22:51 | INFO | fairseq.distributed.utils | initialized host t007-001.hpcfund as rank 3
+2024-07-10 00:22:51 | INFO | fairseq.distributed.utils | initialized host t007-001.hpcfund as rank 1
+2024-07-10 00:22:51 | INFO | fairseq.distributed.utils | initialized host t007-001.hpcfund as rank 2
+2024-07-10 00:22:51 | INFO | fairseq.distributed.utils | initialized host t007-001.hpcfund as rank 0
+/work1/amd/hongmfei/moespace/SPEED-main/fairseq/fairseq/distributed/utils.py:279: UserWarning: expandable_segments not supported on this platform (Triggered internally at ../c10/hip/HIPAllocatorConfig.h:29.)
+  dist.all_reduce(torch.zeros(1).cuda())
+/work1/amd/hongmfei/moespace/SPEED-main/fairseq/fairseq/distributed/utils.py:279: UserWarning: expandable_segments not supported on this platform (Triggered internally at ../c10/hip/HIPAllocatorConfig.h:29.)
+  dist.all_reduce(torch.zeros(1).cuda())
+/work1/amd/hongmfei/moespace/SPEED-main/fairseq/fairseq/distributed/utils.py:279: UserWarning: expandable_segments not supported on this platform (Triggered internally at ../c10/hip/HIPAllocatorConfig.h:29.)
+  dist.all_reduce(torch.zeros(1).cuda())
+/work1/amd/hongmfei/moespace/SPEED-main/fairseq/fairseq/distributed/utils.py:279: UserWarning: expandable_segments not supported on this platform (Triggered internally at ../c10/hip/HIPAllocatorConfig.h:29.)
+  dist.all_reduce(torch.zeros(1).cuda())
+2024-07-10 00:22:51 | INFO | fairseq_cli.eval_lm | ---------------------------
+2024-07-10 00:22:51 | INFO | fairseq_cli.eval_lm | cfg:
+2024-07-10 00:22:51 | INFO | fairseq_cli.eval_lm | _name	None
+2024-07-10 00:22:51 | INFO | fairseq_cli.eval_lm | common	{'_name': None, 'no_progress_bar': False, 'log_interval': 100, 'log_format': None, 'log_file': None, 'tensorboard_logdir': None, 'wandb_project': None, 'azureml_logging': False, 'seed': 100, 'cpu': False, 'tpu': False, 'bf16': False, 'memory_efficient_bf16': False, 'fp16': True, 'memory_efficient_fp16': False, 'fp16_no_flatten_grads': False, 'fp16_init_scale': 128, 'fp16_scale_window': None, 'fp16_scale_tolerance': 0.0, 'min_loss_scale': 0.0001, 'threshold_loss_scale': None, 'user_dir': None, 'empty_cache_freq': 0, 'all_gather_list_size': 16384, 'model_parallel_size': 1, 'quantization_config_path': None, 'profile': False, 'reset_logging': False, 'suppress_crashes': False, 'use_plasma_view': False, 'plasma_path': '/tmp/plasma', 'log_nvidia_smi': False}
+2024-07-10 00:22:51 | INFO | fairseq_cli.eval_lm | common_eval	{'_name': None, 'path': '/work1/amd/hongmfei/models/en_moe_lm_15b/model.pt', 'post_process': None, 'quiet': False, 'model_overrides': "{'world_size': 4, 'moe_eval_capacity_token_fraction': 0.5}", 'results_path': None, 'is_moe': True}
+2024-07-10 00:22:51 | INFO | fairseq_cli.eval_lm | distributed_training	{'_name': None, 'distributed_world_size': 4, 'distributed_rank': 0, 'distributed_backend': 'nccl', 'distributed_init_method': 'tcp://localhost:12993', 'distributed_port': -1, 'device_id': 0, 'distributed_no_spawn': False, 'ddp_backend': 'fully_sharded', 'bucket_cap_mb': 25, 'fix_batches_to_gpus': False, 'find_unused_parameters': False, 'fast_stat_sync': False, 'heartbeat_timeout': -1, 'broadcast_buffers': False, 'slowmo_momentum': None, 'slowmo_algorithm': 'LocalSGD', 'localsgd_frequency': 3, 'nprocs_per_node': 4, 'pipeline_model_parallel': False, 'pipeline_balance': None, 'pipeline_devices': None, 'pipeline_chunks': 0, 'pipeline_encoder_balance': None, 'pipeline_encoder_devices': None, 'pipeline_decoder_balance': None, 'pipeline_decoder_devices': None, 'pipeline_checkpoint': 'never', 'zero_sharding': 'none', 'fp16': True, 'memory_efficient_fp16': False, 'tpu': False, 'no_reshard_after_forward': False, 'fp32_reduce_scatter': False, 'cpu_offload': False, 'use_sharded_state': False, 'distributed_num_procs': 4}
+2024-07-10 00:22:51 | INFO | fairseq_cli.eval_lm | dataset	{'_name': None, 'num_workers': 1, 'num_workers_valid': 0, 'skip_invalid_size_inputs_valid_test': False, 'max_tokens': None, 'batch_size': 1, 'required_batch_size_multiple': 8, 'required_seq_len_multiple': 1, 'dataset_impl': None, 'data_buffer_size': 10, 'train_subset': 'train', 'valid_subset': 'valid', 'combine_valid_subsets': None, 'ignore_unused_valid_subsets': False, 'validate_interval': 1, 'validate_interval_updates': 0, 'validate_after_updates': 0, 'fixed_validation_seed': None, 'disable_validation': False, 'max_tokens_valid': None, 'batch_size_valid': 1, 'max_valid_steps': 100, 'curriculum': 0, 'gen_subset': 'valid', 'num_shards': 1, 'shard_id': 0}
+2024-07-10 00:22:51 | INFO | fairseq_cli.eval_lm | optimization	{'_name': None, 'max_epoch': 0, 'max_update': 0, 'stop_time_hours': 0.0, 'clip_norm': 0.0, 'sentence_avg': False, 'update_freq': [1], 'lr': [0.25], 'stop_min_lr': -1.0, 'use_bmuf': False}
+2024-07-10 00:22:51 | INFO | fairseq_cli.eval_lm | checkpoint	{'_name': None, 'save_dir': 'checkpoints', 'restore_file': 'checkpoint_last.pt', 'finetune_from_model': None, 'reset_dataloader': False, 'reset_lr_scheduler': False, 'reset_meters': False, 'reset_optimizer': False, 'optimizer_overrides': '{}', 'save_interval': 1, 'save_interval_updates': 0, 'keep_interval_updates': -1, 'keep_last_epochs': -1, 'keep_best_checkpoints': -1, 'no_save': False, 'no_epoch_checkpoints': False, 'no_last_checkpoints': False, 'no_best_checkpoints': False, 'no_save_optimizer_state': False, 'no_save_optimizer_state_on_training_finished': False, 'symlink_best_and_last_checkpoints': False, 'best_checkpoint_metric': 'loss', 'maximize_best_checkpoint_metric': False, 'patience': -1, 'checkpoint_suffix': '', 'checkpoint_shard_count': 1, 'load_checkpoint_on_all_dp_ranks': False, 'write_checkpoints_asynchronously': False, 's3_upload_path': None, 'model_parallel_size': 1}
+2024-07-10 00:22:51 | INFO | fairseq_cli.eval_lm | bmuf	{'_name': None, 'block_lr': 1.0, 'block_momentum': 0.875, 'global_sync_iter': 50, 'warmup_iterations': 500, 'use_nbm': False, 'average_sync': False, 'distributed_world_size': 4}
+2024-07-10 00:22:51 | INFO | fairseq_cli.eval_lm | generation	{'_name': None, 'beam': 5, 'nbest': 1, 'max_len_a': 0.0, 'max_len_b': 200, 'min_len': 1, 'match_source_len': False, 'unnormalized': False, 'no_early_stop': False, 'no_beamable_mm': False, 'lenpen': 1.0, 'unkpen': 0.0, 'replace_unk': None, 'sacrebleu': False, 'score_reference': False, 'prefix_size': 0, 'no_repeat_ngram_size': 0, 'sampling': False, 'sampling_topk': -1, 'sampling_topp': -1.0, 'constraints': None, 'temperature': 1.0, 'diverse_beam_groups': -1, 'diverse_beam_strength': 0.5, 'diversity_rate': -1.0, 'print_alignment': None, 'print_step': False, 'lm_path': None, 'lm_weight': 0.0, 'iter_decode_eos_penalty': 0.0, 'iter_decode_max_iter': 10, 'iter_decode_force_max_iter': False, 'iter_decode_with_beam': 1, 'iter_decode_with_external_reranker': False, 'retain_iter_history': False, 'retain_dropout': False, 'retain_dropout_modules': None, 'decoding_format': None, 'no_seed_provided': False}
+2024-07-10 00:22:51 | INFO | fairseq_cli.eval_lm | eval_lm	{'_name': None, 'output_word_probs': False, 'output_word_stats': False, 'context_window': 0, 'softmax_batch': 2048, 'stats_path': None, 'max_valid_steps': 100}
+2024-07-10 00:22:51 | INFO | fairseq_cli.eval_lm | interactive	{'_name': None, 'buffer_size': 0, 'input': '-'}
+2024-07-10 00:22:51 | INFO | fairseq_cli.eval_lm | model	None
+2024-07-10 00:22:51 | INFO | fairseq_cli.eval_lm | task	{'_name': 'language_modeling', 'data': '/work1/amd/hongmfei/raw_data/data-bin/wiki/', 'sample_break_mode': 'none', 'tokens_per_sample': 2048, 'output_dictionary_size': -1, 'self_target': False, 'future_target': False, 'past_target': False, 'add_bos_token': False, 'max_source_positions': None, 'max_target_positions': None, 'shorten_method': 'none', 'shorten_data_split_list': '', 'pad_to_fixed_length': False, 'pad_to_fixed_bsz': False, 'seed': 100, 'batch_size': 1, 'batch_size_valid': 1, 'dataset_impl': None, 'data_buffer_size': 10, 'tpu': False, 'use_plasma_view': False, 'plasma_path': '/tmp/plasma'}
+2024-07-10 00:22:51 | INFO | fairseq_cli.eval_lm | criterion	{'_name': 'cross_entropy', 'sentence_avg': True}
+2024-07-10 00:22:51 | INFO | fairseq_cli.eval_lm | optimizer	None
+2024-07-10 00:22:51 | INFO | fairseq_cli.eval_lm | lr_scheduler	{'_name': 'fixed', 'force_anneal': None, 'lr_shrink': 0.1, 'warmup_updates': 0, 'lr': [0.25]}
+2024-07-10 00:22:51 | INFO | fairseq_cli.eval_lm | scoring	{'_name': 'bleu', 'pad': 1, 'eos': 2, 'unk': 3}
+2024-07-10 00:22:51 | INFO | fairseq_cli.eval_lm | bpe	{'_name': 'gpt2', 'gpt2_encoder_json': 'https://dl.fbaipublicfiles.com/fairseq/gpt2_bpe/encoder.json', 'gpt2_vocab_bpe': 'https://dl.fbaipublicfiles.com/fairseq/gpt2_bpe/vocab.bpe'}
+2024-07-10 00:22:51 | INFO | fairseq_cli.eval_lm | tokenizer	None
+2024-07-10 00:22:51 | INFO | fairseq_cli.eval_lm | simul_type	None
+2024-07-10 00:22:51 | INFO | fairseq_cli.eval_lm | ---------------------------
+2024-07-10 00:22:51 | INFO | fairseq_cli.eval_lm | loading model(s) from /work1/amd/hongmfei/models/en_moe_lm_15b/model.pt
+2024-07-10 00:22:51 | INFO | fairseq.tasks.language_modeling | dictionary: 51200 types
+2024-07-10 00:22:51 | INFO | fairseq.checkpoint_utils | load_model_ensemble_and_task is_moe=True
+2024-07-10 00:22:51 | INFO | fairseq.moe_checkpoint_utils | Found total 64 expert files and current distributed world size: 4, Stitching experts to able to load on current world size.
+2024-07-10 00:22:55 | INFO | fairseq.moe_checkpoint_utils | found 8 local experts in expert_group_id=0
+2024-07-10 00:22:55 | INFO | fairseq.moe_checkpoint_utils | found 8 local experts in expert_group_id=1
+2024-07-10 00:22:55 | INFO | fairseq.moe_checkpoint_utils | found 8 local experts in expert_group_id=2
+2024-07-10 00:22:55 | INFO | fairseq.moe_checkpoint_utils | found 8 local experts in expert_group_id=3
+2024-07-10 00:22:55 | INFO | fairseq.moe_checkpoint_utils | found 8 local experts in expert_group_id=4
+2024-07-10 00:22:55 | INFO | fairseq.moe_checkpoint_utils | found 8 local experts in expert_group_id=5
+2024-07-10 00:22:55 | INFO | fairseq.moe_checkpoint_utils | found 8 local experts in expert_group_id=6
+2024-07-10 00:22:55 | INFO | fairseq.moe_checkpoint_utils | found 8 local experts in expert_group_id=7
+2024-07-10 00:22:55 | INFO | fairseq.moe_checkpoint_utils | found 8 local experts in expert_group_id=8
+2024-07-10 00:22:55 | INFO | fairseq.moe_checkpoint_utils | found 8 local experts in expert_group_id=9
+2024-07-10 00:22:55 | INFO | fairseq.moe_checkpoint_utils | found 8 local experts in expert_group_id=10
+2024-07-10 00:22:55 | INFO | fairseq.moe_checkpoint_utils | found 8 local experts in expert_group_id=11
+2024-07-10 00:22:55 | INFO | fairseq.moe_checkpoint_utils | found 8 local experts in expert_group_id=12
+2024-07-10 00:22:55 | INFO | fairseq.moe_checkpoint_utils | found 8 local experts in expert_group_id=13
+2024-07-10 00:22:55 | INFO | fairseq.moe_checkpoint_utils | found 8 local experts in expert_group_id=14
+2024-07-10 00:22:55 | INFO | fairseq.moe_checkpoint_utils | found 8 local experts in expert_group_id=15
+2024-07-10 00:23:14 | INFO | fairseq_cli.eval_lm | num. model params: 3,725,230,080
+2024-07-10 00:23:27 | INFO | fairseq.data.data_utils | loaded 1,482,831,152 examples from: /work1/amd/hongmfei/raw_data/data-bin/wiki/valid
+2024-07-10 00:23:35 | INFO | fairseq_cli.eval_lm | /work1/amd/hongmfei/raw_data/data-bin/wiki/ valid 17,792,645 examples
+2024-07-10 00:23:55 | INFO | fairseq_cli.eval_lm | load time: 63.41 seconds
+/work1/amd/hongmfei/moespace/.moefair/lib64/python3.9/site-packages/torch/nn/functional.py:5137: UserWarning: Support for mismatched key_padding_mask and attn_mask is deprecated. Use same type for both instead.
+  warnings.warn(
+/work1/amd/hongmfei/moespace/.moefair/lib64/python3.9/site-packages/torch/nn/functional.py:5504: UserWarning: 1Torch was not compiled with memory efficient attention. (Triggered internally at ../aten/src/ATen/native/transformers/hip/sdp_utils.cpp:505.)
+  attn_output = scaled_dot_product_attention(q, k, v, attn_mask, dropout_p, is_causal)
+Warning: The --amdgpu-target option has been deprecated and will be removed in the future.  Use --offload-arch instead.
+/work1/amd/hongmfei/moespace/.moefair/lib64/python3.9/site-packages/torch/nn/functional.py:5504: UserWarning: 1Torch was not compiled with memory efficient attention. (Triggered internally at ../aten/src/ATen/native/transformers/hip/sdp_utils.cpp:505.)
+  attn_output = scaled_dot_product_attention(q, k, v, attn_mask, dropout_p, is_causal)
+/work1/amd/hongmfei/moespace/.moefair/lib64/python3.9/site-packages/torch/nn/functional.py:5504: UserWarning: 1Torch was not compiled with memory efficient attention. (Triggered internally at ../aten/src/ATen/native/transformers/hip/sdp_utils.cpp:505.)
+  attn_output = scaled_dot_product_attention(q, k, v, attn_mask, dropout_p, is_causal)
+Warning: The --amdgpu-target option has been deprecated and will be removed in the future.  Use --offload-arch instead.
+Warning: The --amdgpu-target option has been deprecated and will be removed in the future.  Use --offload-arch instead.
+Warning: The --amdgpu-target option has been deprecated and will be removed in the future.  Use --offload-arch instead.
+Warning: The --amdgpu-target option has been deprecated and will be removed in the future.  Use --offload-arch instead.
+Warning: The --amdgpu-target option has been deprecated and will be removed in the future.  Use --offload-arch instead.
+/work1/amd/hongmfei/moespace/.moefair/lib64/python3.9/site-packages/torch/nn/functional.py:5504: UserWarning: 1Torch was not compiled with memory efficient attention. (Triggered internally at ../aten/src/ATen/native/transformers/hip/sdp_utils.cpp:505.)
+  attn_output = scaled_dot_product_attention(q, k, v, attn_mask, dropout_p, is_causal)
+Warning: The --amdgpu-target option has been deprecated and will be removed in the future.  Use --offload-arch instead.
+Warning: The --amdgpu-target option has been deprecated and will be removed in the future.  Use --offload-arch instead.
+Warning: The --amdgpu-target option has been deprecated and will be removed in the future.  Use --offload-arch instead.
+Warning: The --amdgpu-target option has been deprecated and will be removed in the future.  Use --offload-arch instead.
+Warning: The --amdgpu-target option has been deprecated and will be removed in the future.  Use --offload-arch instead.
+Warning: The --amdgpu-target option has been deprecated and will be removed in the future.  Use --offload-arch instead.
+2024-07-10 00:24:25 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3512.841064453125, gpu time: 3533.990382194519
+2024-07-10 00:24:25 | INFO | fairseq.modules.moe.moe_layer | cpu time: 0.510009765625, gpu time: 30.499042510986328
+2024-07-10 00:24:25 | INFO | fairseq.modules.moe.moe_layer | cpu time: 0.3115234375, gpu time: 24.14848232269287
+2024-07-10 00:24:25 | INFO | fairseq.modules.moe.moe_layer | cpu time: 0.30712890625, gpu time: 29.932483673095703
+2024-07-10 00:24:26 | INFO | fairseq.modules.moe.moe_layer | cpu time: 0.311767578125, gpu time: 23.695042610168457
+2024-07-10 00:24:26 | INFO | fairseq.modules.moe.moe_layer | cpu time: 0.439697265625, gpu time: 32.253122329711914
+2024-07-10 00:24:26 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3513.25341796875, gpu time: 3565.872946739197
+2024-07-10 00:24:26 | INFO | fairseq.modules.moe.moe_layer | cpu time: 0.83642578125, gpu time: 59.761284828186035
+2024-07-10 00:24:26 | INFO | fairseq.modules.moe.moe_layer | cpu time: 0.62255859375, gpu time: 48.42080497741699
+2024-07-10 00:24:26 | INFO | fairseq.modules.moe.moe_layer | cpu time: 0.717041015625, gpu time: 60.02000713348389
+2024-07-10 00:24:26 | INFO | fairseq.modules.moe.moe_layer | cpu time: 0.658935546875, gpu time: 47.896164894104004
+2024-07-10 00:24:27 | INFO | fairseq.modules.moe.moe_layer | cpu time: 0.755859375, gpu time: 62.31584548950195
+2024-07-10 00:24:27 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3513.572021484375, gpu time: 3590.10671043396
+2024-07-10 00:24:27 | INFO | fairseq.modules.moe.moe_layer | cpu time: 1.273193359375, gpu time: 84.0075273513794
+2024-07-10 00:24:27 | INFO | fairseq.modules.moe.moe_layer | cpu time: 0.9306640625, gpu time: 78.25872898101807
+2024-07-10 00:24:27 | INFO | fairseq.modules.moe.moe_layer | cpu time: 1.030029296875, gpu time: 90.16848945617676
+2024-07-10 00:24:27 | INFO | fairseq.modules.moe.moe_layer | cpu time: 0.96240234375, gpu time: 71.74560737609863
+2024-07-10 00:24:27 | INFO | fairseq.modules.moe.moe_layer | cpu time: 1.11767578125, gpu time: 92.51664733886719
+2024-07-10 00:24:27 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3513.885498046875, gpu time: 3614.9958324432373
+2024-07-10 00:24:28 | INFO | fairseq.modules.moe.moe_layer | cpu time: 1.586181640625, gpu time: 114.85968971252441
+2024-07-10 00:24:28 | INFO | fairseq.modules.moe.moe_layer | cpu time: 1.24267578125, gpu time: 102.02417182922363
+2024-07-10 00:24:28 | INFO | fairseq.modules.moe.moe_layer | cpu time: 1.392333984375, gpu time: 114.32161235809326
+2024-07-10 00:24:28 | INFO | fairseq.modules.moe.moe_layer | cpu time: 1.27880859375, gpu time: 100.40768814086914
+2024-07-10 00:24:28 | INFO | fairseq.modules.moe.moe_layer | cpu time: 1.433837890625, gpu time: 121.87616920471191
+2024-07-10 00:24:28 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3514.20751953125, gpu time: 3638.9179162979126
+2024-07-10 00:24:28 | INFO | fairseq.modules.moe.moe_layer | cpu time: 1.892333984375, gpu time: 144.9427318572998
+2024-07-10 00:24:29 | INFO | fairseq.modules.moe.moe_layer | cpu time: 1.541748046875, gpu time: 126.24529361724854
+2024-07-10 00:24:29 | INFO | fairseq.modules.moe.moe_layer | cpu time: 1.69677734375, gpu time: 144.66657543182373
+2024-07-10 00:24:29 | INFO | fairseq.modules.moe.moe_layer | cpu time: 1.5859375, gpu time: 137.55473041534424
+2024-07-10 00:24:29 | INFO | fairseq.modules.moe.moe_layer | cpu time: 1.813232421875, gpu time: 146.27697086334229
+2024-07-10 00:24:29 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3514.574951171875, gpu time: 3668.9292783737183
+2024-07-10 00:24:29 | INFO | fairseq.modules.moe.moe_layer | cpu time: 2.217529296875, gpu time: 175.5204954147339
+2024-07-10 00:24:29 | INFO | fairseq.modules.moe.moe_layer | cpu time: 1.8662109375, gpu time: 152.10321521759033
+2024-07-10 00:24:30 | INFO | fairseq.modules.moe.moe_layer | cpu time: 2.01513671875, gpu time: 182.45730113983154
+2024-07-10 00:24:30 | INFO | fairseq.modules.moe.moe_layer | cpu time: 1.9013671875, gpu time: 162.95249366760254
+2024-07-10 00:24:30 | INFO | fairseq.modules.moe.moe_layer | cpu time: 2.13037109375, gpu time: 176.98897457122803
+2024-07-10 00:24:30 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3514.89501953125, gpu time: 3699.3623991012573
+2024-07-10 00:24:30 | INFO | fairseq.modules.moe.moe_layer | cpu time: 2.543701171875, gpu time: 199.32401752471924
+2024-07-10 00:24:30 | INFO | fairseq.modules.moe.moe_layer | cpu time: 2.175537109375, gpu time: 181.98497867584229
+2024-07-10 00:24:30 | INFO | fairseq.modules.moe.moe_layer | cpu time: 2.32568359375, gpu time: 212.48178482055664
+2024-07-10 00:24:30 | INFO | fairseq.modules.moe.moe_layer | cpu time: 2.2099609375, gpu time: 187.3816156387329
+2024-07-10 00:24:31 | INFO | fairseq.modules.moe.moe_layer | cpu time: 2.44580078125, gpu time: 200.76225662231445
+2024-07-10 00:24:31 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3515.238525390625, gpu time: 3729.753122329712
+2024-07-10 00:24:31 | INFO | fairseq.modules.moe.moe_layer | cpu time: 2.857421875, gpu time: 223.51009941101074
+2024-07-10 00:24:31 | INFO | fairseq.modules.moe.moe_layer | cpu time: 2.50390625, gpu time: 212.4803409576416
+2024-07-10 00:24:31 | INFO | fairseq.modules.moe.moe_layer | cpu time: 2.6396484375, gpu time: 236.11218643188477
+2024-07-10 00:24:31 | INFO | fairseq.modules.moe.moe_layer | cpu time: 2.657470703125, gpu time: 217.28993797302246
+2024-07-10 00:24:31 | INFO | fairseq.modules.moe.moe_layer | cpu time: 2.847412109375, gpu time: 230.75378036499023
+2024-07-10 00:24:32 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3515.620361328125, gpu time: 3754.0750436782837
+2024-07-10 00:24:32 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3.160400390625, gpu time: 247.41394138336182
+2024-07-10 00:24:32 | INFO | fairseq.modules.moe.moe_layer | cpu time: 2.85888671875, gpu time: 242.46258449554443
+2024-07-10 00:24:32 | INFO | fairseq.modules.moe.moe_layer | cpu time: 2.96826171875, gpu time: 260.5025882720947
+2024-07-10 00:24:32 | INFO | fairseq.modules.moe.moe_layer | cpu time: 2.972900390625, gpu time: 247.55698108673096
+2024-07-10 00:24:32 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3.170654296875, gpu time: 260.19874382019043
+2024-07-10 00:24:32 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3515.93115234375, gpu time: 3780.893285751343
+2024-07-10 00:24:33 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3.486083984375, gpu time: 277.2656240463257
+2024-07-10 00:24:33 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3.17236328125, gpu time: 266.70354652404785
+2024-07-10 00:24:33 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3.277099609375, gpu time: 290.30323123931885
+2024-07-10 00:24:33 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3.283935546875, gpu time: 278.06770420074463
+2024-07-10 00:24:33 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3.488525390625, gpu time: 284.54546642303467
+2024-07-10 00:24:33 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3516.23974609375, gpu time: 3810.9112100601196
+2024-07-10 00:24:33 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3.88037109375, gpu time: 311.9737882614136
+2024-07-10 00:24:34 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3.560791015625, gpu time: 291.100830078125
+2024-07-10 00:24:34 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3.594482421875, gpu time: 319.54259490966797
+2024-07-10 00:24:34 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3.603515625, gpu time: 315.2366704940796
+2024-07-10 00:24:34 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3.814208984375, gpu time: 309.5771493911743
+2024-07-10 00:24:34 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3516.664794921875, gpu time: 3840.216654777527
+2024-07-10 00:24:34 | INFO | fairseq.modules.moe.moe_layer | cpu time: 4.19482421875, gpu time: 343.4846715927124
+2024-07-10 00:24:34 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3.880126953125, gpu time: 321.0979537963867
+2024-07-10 00:24:35 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3.90234375, gpu time: 350.9681968688965
+2024-07-10 00:24:35 | INFO | fairseq.modules.moe.moe_layer | cpu time: 4.002197265625, gpu time: 339.73859214782715
+2024-07-10 00:24:35 | INFO | fairseq.modules.moe.moe_layer | cpu time: 4.149658203125, gpu time: 344.50723361968994
+2024-07-10 00:24:35 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3516.976806640625, gpu time: 3870.5976181030273
+2024-07-10 00:24:35 | INFO | fairseq.modules.moe.moe_layer | cpu time: 4.514404296875, gpu time: 367.9742736816406
+2024-07-10 00:24:35 | INFO | fairseq.modules.moe.moe_layer | cpu time: 4.2666015625, gpu time: 352.97603607177734
+2024-07-10 00:24:35 | INFO | fairseq.modules.moe.moe_layer | cpu time: 4.22900390625, gpu time: 381.33204078674316
+2024-07-10 00:24:35 | INFO | fairseq.modules.moe.moe_layer | cpu time: 4.312255859375, gpu time: 363.95507431030273
+2024-07-10 00:24:36 | INFO | fairseq.modules.moe.moe_layer | cpu time: 4.484130859375, gpu time: 374.7677183151245
+2024-07-10 00:24:36 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3517.384521484375, gpu time: 3901.3968210220337
+2024-07-10 00:24:36 | INFO | fairseq.modules.moe.moe_layer | cpu time: 4.839599609375, gpu time: 392.3080358505249
+2024-07-10 00:24:36 | INFO | fairseq.modules.moe.moe_layer | cpu time: 4.580078125, gpu time: 383.0533199310303
+2024-07-10 00:24:36 | INFO | fairseq.modules.moe.moe_layer | cpu time: 4.541015625, gpu time: 405.9507637023926
+2024-07-10 00:24:36 | INFO | fairseq.modules.moe.moe_layer | cpu time: 4.68798828125, gpu time: 402.70019912719727
+2024-07-10 00:24:36 | INFO | fairseq.modules.moe.moe_layer | cpu time: 4.794921875, gpu time: 405.6821222305298
+2024-07-10 00:24:37 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3517.704345703125, gpu time: 3928.5017833709717
+2024-07-10 00:24:37 | INFO | fairseq.modules.moe.moe_layer | cpu time: 5.151611328125, gpu time: 429.3467607498169
+2024-07-10 00:24:37 | INFO | fairseq.modules.moe.moe_layer | cpu time: 4.906005859375, gpu time: 407.2430830001831
+2024-07-10 00:24:37 | INFO | fairseq.modules.moe.moe_layer | cpu time: 4.97998046875, gpu time: 430.11380672454834
+2024-07-10 00:24:37 | INFO | fairseq.modules.moe.moe_layer | cpu time: 5.04052734375, gpu time: 427.2254819869995
+2024-07-10 00:24:37 | INFO | fairseq.modules.moe.moe_layer | cpu time: 5.119140625, gpu time: 435.46244621276855
+2024-07-10 00:24:37 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3518.05322265625, gpu time: 3965.089307785034
+2024-07-10 00:24:38 | INFO | fairseq.modules.moe.moe_layer | cpu time: 5.557861328125, gpu time: 460.7307643890381
+2024-07-10 00:24:38 | INFO | fairseq.modules.moe.moe_layer | cpu time: 5.245849609375, gpu time: 438.0610055923462
+2024-07-10 00:24:38 | INFO | fairseq.modules.moe.moe_layer | cpu time: 5.308837890625, gpu time: 466.10325145721436
+2024-07-10 00:24:38 | INFO | fairseq.modules.moe.moe_layer | cpu time: 5.35546875, gpu time: 461.57172679901123
+2024-07-10 00:24:38 | INFO | fairseq.modules.moe.moe_layer | cpu time: 5.44921875, gpu time: 467.1621313095093
+2024-07-10 00:24:38 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3518.3828125, gpu time: 3997.4000329971313
+2024-07-10 00:24:38 | INFO | fairseq.modules.moe.moe_layer | cpu time: 5.886962890625, gpu time: 491.5787687301636
+2024-07-10 00:24:39 | INFO | fairseq.modules.moe.moe_layer | cpu time: 5.587646484375, gpu time: 480.884690284729
+2024-07-10 00:24:39 | INFO | fairseq.modules.moe.moe_layer | cpu time: 5.647216796875, gpu time: 496.91109466552734
+2024-07-10 00:24:39 | INFO | fairseq.modules.moe.moe_layer | cpu time: 5.681884765625, gpu time: 492.713171005249
+2024-07-10 00:24:39 | INFO | fairseq.modules.moe.moe_layer | cpu time: 5.7734375, gpu time: 498.53573513031006
+2024-07-10 00:24:39 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3518.712158203125, gpu time: 4040.1694803237915
+2024-07-10 00:24:39 | INFO | fairseq.modules.moe.moe_layer | cpu time: 6.21630859375, gpu time: 522.7021331787109
+2024-07-10 00:24:39 | INFO | fairseq.modules.moe.moe_layer | cpu time: 5.94189453125, gpu time: 511.838454246521
+2024-07-10 00:24:40 | INFO | fairseq.modules.moe.moe_layer | cpu time: 5.974609375, gpu time: 528.0355796813965
+2024-07-10 00:24:40 | INFO | fairseq.modules.moe.moe_layer | cpu time: 6.027099609375, gpu time: 534.2165374755859
+2024-07-10 00:24:40 | INFO | fairseq.modules.moe.moe_layer | cpu time: 6.1064453125, gpu time: 529.225977897644
+2024-07-10 00:24:40 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3519.0361328125, gpu time: 4072.117964744568
+2024-07-10 00:24:40 | INFO | fairseq.modules.moe.moe_layer | cpu time: 6.5361328125, gpu time: 561.1581382751465
+2024-07-10 00:24:40 | INFO | fairseq.modules.moe.moe_layer | cpu time: 6.279052734375, gpu time: 543.4376564025879
+2024-07-10 00:24:40 | INFO | fairseq.modules.moe.moe_layer | cpu time: 6.308349609375, gpu time: 558.7771835327148
+2024-07-10 00:24:41 | INFO | fairseq.modules.moe.moe_layer | cpu time: 6.360595703125, gpu time: 565.0690212249756
+2024-07-10 00:24:41 | INFO | fairseq.modules.moe.moe_layer | cpu time: 6.4365234375, gpu time: 566.2959051132202
+2024-07-10 00:24:41 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3519.376220703125, gpu time: 4103.081969261169
+2024-07-10 00:24:41 | INFO | fairseq.modules.moe.moe_layer | cpu time: 6.87109375, gpu time: 591.4994230270386
+2024-07-10 00:24:41 | INFO | fairseq.modules.moe.moe_layer | cpu time: 6.607421875, gpu time: 580.3403816223145
+2024-07-10 00:24:41 | INFO | fairseq.modules.moe.moe_layer | cpu time: 6.634765625, gpu time: 596.345027923584
+2024-07-10 00:24:41 | INFO | fairseq.modules.moe.moe_layer | cpu time: 6.702880859375, gpu time: 596.0624647140503
+2024-07-10 00:24:42 | INFO | fairseq.modules.moe.moe_layer | cpu time: 6.76904296875, gpu time: 597.4845495223999
+2024-07-10 00:24:42 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3519.721435546875, gpu time: 4136.657493591309
+2024-07-10 00:24:42 | INFO | fairseq.modules.moe.moe_layer | cpu time: 7.30517578125, gpu time: 622.9567079544067
+2024-07-10 00:24:42 | INFO | fairseq.modules.moe.moe_layer | cpu time: 6.9423828125, gpu time: 610.6079053878784
+2024-07-10 00:24:42 | INFO | fairseq.modules.moe.moe_layer | cpu time: 6.9736328125, gpu time: 627.9906349182129
+2024-07-10 00:24:42 | INFO | fairseq.modules.moe.moe_layer | cpu time: 7.039794921875, gpu time: 629.1594314575195
+2024-07-10 00:24:42 | INFO | fairseq.modules.moe.moe_layer | cpu time: 7.090087890625, gpu time: 628.7160749435425
+2024-07-10 00:24:43 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3520.179443359375, gpu time: 4166.083897590637
+2024-07-10 00:24:43 | INFO | fairseq.modules.moe.moe_layer | cpu time: 7.6376953125, gpu time: 656.058632850647
+2024-07-10 00:24:43 | INFO | fairseq.modules.moe.moe_layer | cpu time: 7.263916015625, gpu time: 649.9189538955688
+2024-07-10 00:24:43 | INFO | fairseq.modules.moe.moe_layer | cpu time: 7.28271484375, gpu time: 654.3386392593384
+2024-07-10 00:24:43 | INFO | fairseq.modules.moe.moe_layer | cpu time: 7.643798828125, gpu time: 659.552716255188
+2024-07-10 00:24:43 | INFO | fairseq.modules.moe.moe_layer | cpu time: 7.640869140625, gpu time: 658.7256803512573
+2024-07-10 00:24:44 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3520.755126953125, gpu time: 4208.296866416931
+2024-07-10 00:24:44 | INFO | fairseq.modules.moe.moe_layer | cpu time: 8.120849609375, gpu time: 679.6906356811523
+2024-07-10 00:24:44 | INFO | fairseq.modules.moe.moe_layer | cpu time: 7.689697265625, gpu time: 674.2559175491333
+2024-07-10 00:24:44 | INFO | fairseq.modules.moe.moe_layer | cpu time: 7.631103515625, gpu time: 685.1888856887817
+2024-07-10 00:24:44 | INFO | fairseq.modules.moe.moe_layer | cpu time: 7.990478515625, gpu time: 684.0363998413086
+2024-07-10 00:24:44 | INFO | fairseq.modules.moe.moe_layer | cpu time: 7.9970703125, gpu time: 682.4408845901489
+2024-07-10 00:24:44 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3521.155517578125, gpu time: 4233.270470619202
+2024-07-10 00:24:44 | INFO | fairseq.modules.moe.moe_layer | cpu time: 8.476318359375, gpu time: 710.2367210388184
+2024-07-10 00:24:45 | INFO | fairseq.modules.moe.moe_layer | cpu time: 8.0185546875, gpu time: 698.4735221862793
+2024-07-10 00:24:45 | INFO | fairseq.modules.moe.moe_layer | cpu time: 7.972412109375, gpu time: 708.7996101379395
+2024-07-10 00:24:45 | INFO | fairseq.modules.moe.moe_layer | cpu time: 8.352783203125, gpu time: 710.8282442092896
+2024-07-10 00:24:45 | INFO | fairseq.modules.moe.moe_layer | cpu time: 8.36181640625, gpu time: 712.8488903045654
+2024-07-10 00:24:45 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3521.759033203125, gpu time: 4257.840874671936
+2024-07-10 00:24:45 | INFO | fairseq.modules.moe.moe_layer | cpu time: 8.9130859375, gpu time: 743.4424867630005
+2024-07-10 00:24:45 | INFO | fairseq.modules.moe.moe_layer | cpu time: 8.45849609375, gpu time: 728.7775278091431
+2024-07-10 00:24:46 | INFO | fairseq.modules.moe.moe_layer | cpu time: 8.344970703125, gpu time: 733.235294342041
+2024-07-10 00:24:46 | INFO | fairseq.modules.moe.moe_layer | cpu time: 8.699462890625, gpu time: 736.8064889907837
+2024-07-10 00:24:46 | INFO | fairseq.modules.moe.moe_layer | cpu time: 8.704833984375, gpu time: 737.0992946624756
+2024-07-10 00:24:46 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3522.14599609375, gpu time: 4288.655602455139
+2024-07-10 00:24:46 | INFO | fairseq.modules.moe.moe_layer | cpu time: 9.253173828125, gpu time: 772.3130502700806
+2024-07-10 00:24:46 | INFO | fairseq.modules.moe.moe_layer | cpu time: 8.798828125, gpu time: 756.6456918716431
+2024-07-10 00:24:46 | INFO | fairseq.modules.moe.moe_layer | cpu time: 8.692138671875, gpu time: 757.7490587234497
+2024-07-10 00:24:47 | INFO | fairseq.modules.moe.moe_layer | cpu time: 9.20068359375, gpu time: 767.3128957748413
+2024-07-10 00:24:47 | INFO | fairseq.modules.moe.moe_layer | cpu time: 9.08251953125, gpu time: 761.8224983215332
+2024-07-10 00:24:47 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3522.458740234375, gpu time: 4320.048248291016
+2024-07-10 00:24:47 | INFO | fairseq.modules.moe.moe_layer | cpu time: 9.649658203125, gpu time: 804.9394578933716
+2024-07-10 00:24:47 | INFO | fairseq.modules.moe.moe_layer | cpu time: 9.122314453125, gpu time: 787.2188186645508
+2024-07-10 00:24:47 | INFO | fairseq.modules.moe.moe_layer | cpu time: 8.999755859375, gpu time: 784.40234375
+2024-07-10 00:24:47 | INFO | fairseq.modules.moe.moe_layer | cpu time: 9.506103515625, gpu time: 797.6581840515137
+2024-07-10 00:24:48 | INFO | fairseq.modules.moe.moe_layer | cpu time: 9.396240234375, gpu time: 794.3705062866211
+2024-07-10 00:24:48 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3523.267822265625, gpu time: 4343.985053062439
+2024-07-10 00:24:48 | INFO | fairseq.modules.moe.moe_layer | cpu time: 10.1005859375, gpu time: 829.4660224914551
+2024-07-10 00:24:48 | INFO | fairseq.modules.moe.moe_layer | cpu time: 9.47021484375, gpu time: 816.172905921936
+2024-07-10 00:24:48 | INFO | fairseq.modules.moe.moe_layer | cpu time: 9.345947265625, gpu time: 814.4809083938599
+2024-07-10 00:24:48 | INFO | fairseq.modules.moe.moe_layer | cpu time: 9.841552734375, gpu time: 823.4460287094116
+2024-07-10 00:24:48 | INFO | fairseq.modules.moe.moe_layer | cpu time: 9.776611328125, gpu time: 825.4135522842407
+2024-07-10 00:24:49 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3523.63671875, gpu time: 4383.113221168518
+2024-07-10 00:24:49 | INFO | fairseq.modules.moe.moe_layer | cpu time: 10.475830078125, gpu time: 861.3745098114014
+2024-07-10 00:24:49 | INFO | fairseq.modules.moe.moe_layer | cpu time: 9.835205078125, gpu time: 853.4295520782471
+2024-07-10 00:24:49 | INFO | fairseq.modules.moe.moe_layer | cpu time: 9.69873046875, gpu time: 844.9221935272217
+2024-07-10 00:24:49 | INFO | fairseq.modules.moe.moe_layer | cpu time: 10.168212890625, gpu time: 858.1029958724976
+2024-07-10 00:24:49 | INFO | fairseq.modules.moe.moe_layer | cpu time: 10.12744140625, gpu time: 858.2239589691162
+2024-07-10 00:24:49 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3524.17529296875, gpu time: 4413.7457065582275
+2024-07-10 00:24:50 | INFO | fairseq.modules.moe.moe_layer | cpu time: 10.860595703125, gpu time: 892.1173963546753
+2024-07-10 00:24:50 | INFO | fairseq.modules.moe.moe_layer | cpu time: 10.206787109375, gpu time: 886.9221982955933
+2024-07-10 00:24:50 | INFO | fairseq.modules.moe.moe_layer | cpu time: 10.053955078125, gpu time: 885.3466806411743
+2024-07-10 00:24:50 | INFO | fairseq.modules.moe.moe_layer | cpu time: 10.76904296875, gpu time: 887.4591627120972
+2024-07-10 00:24:50 | INFO | fairseq.modules.moe.moe_layer | cpu time: 10.59912109375, gpu time: 888.8481254577637
+2024-07-10 00:24:50 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3524.675537109375, gpu time: 4442.950833320618
+2024-07-10 00:24:50 | INFO | fairseq.modules.moe.moe_layer | cpu time: 11.32763671875, gpu time: 921.9001226425171
+2024-07-10 00:24:51 | INFO | fairseq.modules.moe.moe_layer | cpu time: 10.688232421875, gpu time: 918.1434850692749
+2024-07-10 00:24:51 | INFO | fairseq.modules.moe.moe_layer | cpu time: 10.4794921875, gpu time: 920.9646081924438
+2024-07-10 00:24:51 | INFO | fairseq.modules.moe.moe_layer | cpu time: 11.193115234375, gpu time: 918.2431697845459
+2024-07-10 00:24:51 | INFO | fairseq.modules.moe.moe_layer | cpu time: 11.08740234375, gpu time: 919.2258930206299
+2024-07-10 00:24:51 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3525.02294921875, gpu time: 4473.7975606918335
+2024-07-10 00:24:51 | INFO | fairseq.modules.moe.moe_layer | cpu time: 11.726806640625, gpu time: 952.1230087280273
+2024-07-10 00:24:51 | INFO | fairseq.modules.moe.moe_layer | cpu time: 11.009765625, gpu time: 949.3287715911865
+2024-07-10 00:24:52 | INFO | fairseq.modules.moe.moe_layer | cpu time: 10.798828125, gpu time: 954.1623754501343
+2024-07-10 00:24:52 | INFO | fairseq.modules.moe.moe_layer | cpu time: 11.518798828125, gpu time: 954.58349609375
+2024-07-10 00:24:52 | INFO | fairseq.modules.moe.moe_layer | cpu time: 11.40673828125, gpu time: 950.1446208953857
+2024-07-10 00:24:52 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3525.661865234375, gpu time: 4505.75420665741
+2024-07-10 00:24:52 | INFO | fairseq.modules.moe.moe_layer | cpu time: 12.385009765625, gpu time: 982.1478157043457
+2024-07-10 00:24:52 | INFO | fairseq.modules.moe.moe_layer | cpu time: 11.525146484375, gpu time: 978.5519790649414
+2024-07-10 00:24:52 | INFO | fairseq.modules.moe.moe_layer | cpu time: 11.21484375, gpu time: 987.1023826599121
+2024-07-10 00:24:53 | INFO | fairseq.modules.moe.moe_layer | cpu time: 11.95556640625, gpu time: 983.7559823989868
+2024-07-10 00:24:53 | INFO | fairseq.modules.moe.moe_layer | cpu time: 11.86962890625, gpu time: 985.2900695800781
+2024-07-10 00:24:53 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3526.086181640625, gpu time: 4536.303333282471
+2024-07-10 00:24:53 | INFO | fairseq.modules.moe.moe_layer | cpu time: 12.80517578125, gpu time: 1017.0967826843262
+2024-07-10 00:24:53 | INFO | fairseq.modules.moe.moe_layer | cpu time: 11.94189453125, gpu time: 1009.3433465957642
+2024-07-10 00:24:53 | INFO | fairseq.modules.moe.moe_layer | cpu time: 11.637451171875, gpu time: 1023.3105506896973
+2024-07-10 00:24:53 | INFO | fairseq.modules.moe.moe_layer | cpu time: 12.3466796875, gpu time: 1016.7883100509644
+2024-07-10 00:24:54 | INFO | fairseq.modules.moe.moe_layer | cpu time: 12.28857421875, gpu time: 1020.9271965026855
+2024-07-10 00:24:54 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3526.57568359375, gpu time: 4571.571821212769
+2024-07-10 00:24:54 | INFO | fairseq.modules.moe.moe_layer | cpu time: 13.20458984375, gpu time: 1053.0459117889404
+2024-07-10 00:24:54 | INFO | fairseq.modules.moe.moe_layer | cpu time: 12.354248046875, gpu time: 1042.162714958191
+2024-07-10 00:24:54 | INFO | fairseq.modules.moe.moe_layer | cpu time: 12.0615234375, gpu time: 1059.453917503357
+2024-07-10 00:24:54 | INFO | fairseq.modules.moe.moe_layer | cpu time: 12.836181640625, gpu time: 1053.0787172317505
+2024-07-10 00:24:54 | INFO | fairseq.modules.moe.moe_layer | cpu time: 12.78271484375, gpu time: 1051.3860845565796
+2024-07-10 00:24:55 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3527.12451171875, gpu time: 4607.667669296265
+2024-07-10 00:24:55 | INFO | fairseq.modules.moe.moe_layer | cpu time: 13.65625, gpu time: 1083.1795196533203
+2024-07-10 00:24:55 | INFO | fairseq.modules.moe.moe_layer | cpu time: 13.130615234375, gpu time: 1076.927363395691
+2024-07-10 00:24:55 | INFO | fairseq.modules.moe.moe_layer | cpu time: 12.5556640625, gpu time: 1089.5803241729736
+2024-07-10 00:24:55 | INFO | fairseq.modules.moe.moe_layer | cpu time: 13.358642578125, gpu time: 1083.7456045150757
+2024-07-10 00:24:55 | INFO | fairseq.modules.moe.moe_layer | cpu time: 13.227783203125, gpu time: 1080.5817728042603
+2024-07-10 00:24:56 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3527.6533203125, gpu time: 4644.752157211304
+2024-07-10 00:24:56 | INFO | fairseq.modules.moe.moe_layer | cpu time: 14.212646484375, gpu time: 1115.6488075256348
+2024-07-10 00:24:56 | INFO | fairseq.modules.moe.moe_layer | cpu time: 13.662841796875, gpu time: 1110.217290878296
+2024-07-10 00:24:56 | INFO | fairseq.modules.moe.moe_layer | cpu time: 12.99560546875, gpu time: 1120.2641716003418
+2024-07-10 00:24:56 | INFO | fairseq.modules.moe.moe_layer | cpu time: 13.80517578125, gpu time: 1114.25537109375
+2024-07-10 00:24:56 | INFO | fairseq.modules.moe.moe_layer | cpu time: 13.6884765625, gpu time: 1110.1649799346924
+2024-07-10 00:24:56 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3528.13818359375, gpu time: 4673.900483131409
+2024-07-10 00:24:57 | INFO | fairseq.modules.moe.moe_layer | cpu time: 14.643798828125, gpu time: 1145.4449758529663
+2024-07-10 00:24:57 | INFO | fairseq.modules.moe.moe_layer | cpu time: 14.112548828125, gpu time: 1139.7662572860718
+2024-07-10 00:24:57 | INFO | fairseq.modules.moe.moe_layer | cpu time: 13.40087890625, gpu time: 1150.7057781219482
+2024-07-10 00:24:57 | INFO | fairseq.modules.moe.moe_layer | cpu time: 14.2265625, gpu time: 1145.161138534546
+2024-07-10 00:24:57 | INFO | fairseq.modules.moe.moe_layer | cpu time: 14.133056640625, gpu time: 1136.1345872879028
+2024-07-10 00:24:57 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3528.611572265625, gpu time: 4712.03985118866
+2024-07-10 00:24:57 | INFO | fairseq.modules.moe.moe_layer | cpu time: 15.0830078125, gpu time: 1173.502423286438
+2024-07-10 00:24:58 | INFO | fairseq.modules.moe.moe_layer | cpu time: 14.535888671875, gpu time: 1169.8209838867188
+2024-07-10 00:24:58 | INFO | fairseq.modules.moe.moe_layer | cpu time: 13.8857421875, gpu time: 1174.9504251480103
+2024-07-10 00:24:58 | INFO | fairseq.modules.moe.moe_layer | cpu time: 14.6767578125, gpu time: 1175.9272260665894
+2024-07-10 00:24:58 | INFO | fairseq.modules.moe.moe_layer | cpu time: 14.530517578125, gpu time: 1165.0192346572876
+2024-07-10 00:24:58 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3529.068603515625, gpu time: 4743.323698043823
+2024-07-10 00:24:58 | INFO | fairseq.modules.moe.moe_layer | cpu time: 15.509521484375, gpu time: 1200.271390914917
+2024-07-10 00:24:58 | INFO | fairseq.modules.moe.moe_layer | cpu time: 14.99365234375, gpu time: 1204.2670726776123
+2024-07-10 00:24:59 | INFO | fairseq.modules.moe.moe_layer | cpu time: 14.31982421875, gpu time: 1205.195553779602
+2024-07-10 00:24:59 | INFO | fairseq.modules.moe.moe_layer | cpu time: 15.116943359375, gpu time: 1202.6765146255493
+2024-07-10 00:24:59 | INFO | fairseq.modules.moe.moe_layer | cpu time: 15.046875, gpu time: 1194.6758823394775
+2024-07-10 00:24:59 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3529.552734375, gpu time: 4775.279546737671
+2024-07-10 00:24:59 | INFO | fairseq.modules.moe.moe_layer | cpu time: 15.96533203125, gpu time: 1227.177477836609
+2024-07-10 00:24:59 | INFO | fairseq.modules.moe.moe_layer | cpu time: 15.441162109375, gpu time: 1232.7678813934326
+2024-07-10 00:24:59 | INFO | fairseq.modules.moe.moe_layer | cpu time: 14.79638671875, gpu time: 1236.1125211715698
+2024-07-10 00:25:00 | INFO | fairseq.modules.moe.moe_layer | cpu time: 15.549560546875, gpu time: 1231.7224426269531
+2024-07-10 00:25:00 | INFO | fairseq.modules.moe.moe_layer | cpu time: 15.552978515625, gpu time: 1220.5554094314575
+2024-07-10 00:25:00 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3530.03564453125, gpu time: 4813.325155258179
+2024-07-10 00:25:00 | INFO | fairseq.modules.moe.moe_layer | cpu time: 16.403076171875, gpu time: 1251.422444343567
+2024-07-10 00:25:00 | INFO | fairseq.modules.moe.moe_layer | cpu time: 15.886474609375, gpu time: 1265.7570123672485
+2024-07-10 00:25:00 | INFO | fairseq.modules.moe.moe_layer | cpu time: 15.2587890625, gpu time: 1260.4632482528687
+2024-07-10 00:25:00 | INFO | fairseq.modules.moe.moe_layer | cpu time: 16.1279296875, gpu time: 1267.8610134124756
+2024-07-10 00:25:01 | INFO | fairseq.modules.moe.moe_layer | cpu time: 16.009521484375, gpu time: 1250.9506168365479
+2024-07-10 00:25:01 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3530.532958984375, gpu time: 4842.671242713928
+2024-07-10 00:25:01 | INFO | fairseq.modules.moe.moe_layer | cpu time: 17.638916015625, gpu time: 1282.415732383728
+2024-07-10 00:25:01 | INFO | fairseq.modules.moe.moe_layer | cpu time: 16.270263671875, gpu time: 1304.2562246322632
+2024-07-10 00:25:01 | INFO | fairseq.modules.moe.moe_layer | cpu time: 15.619140625, gpu time: 1292.8986186981201
+2024-07-10 00:25:01 | INFO | fairseq.modules.moe.moe_layer | cpu time: 16.462158203125, gpu time: 1297.2061414718628
+2024-07-10 00:25:01 | INFO | fairseq.modules.moe.moe_layer | cpu time: 16.76904296875, gpu time: 1282.1639070510864
+2024-07-10 00:25:02 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3531.106689453125, gpu time: 4881.303574562073
+2024-07-10 00:25:02 | INFO | fairseq.modules.moe.moe_layer | cpu time: 18.242431640625, gpu time: 1313.6672592163086
+2024-07-10 00:25:02 | INFO | fairseq.modules.moe.moe_layer | cpu time: 16.74609375, gpu time: 1334.9181537628174
+2024-07-10 00:25:02 | INFO | fairseq.modules.moe.moe_layer | cpu time: 16.1220703125, gpu time: 1325.8683881759644
+2024-07-10 00:25:02 | INFO | fairseq.modules.moe.moe_layer | cpu time: 16.784423828125, gpu time: 1329.0397520065308
+2024-07-10 00:25:02 | INFO | fairseq.modules.moe.moe_layer | cpu time: 17.085693359375, gpu time: 1307.930793762207
+2024-07-10 00:25:03 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3531.681884765625, gpu time: 4911.614942550659
+2024-07-10 00:25:03 | INFO | fairseq.modules.moe.moe_layer | cpu time: 18.798828125, gpu time: 1346.2472677230835
+2024-07-10 00:25:03 | INFO | fairseq.modules.moe.moe_layer | cpu time: 17.208740234375, gpu time: 1360.9386405944824
+2024-07-10 00:25:03 | INFO | fairseq.modules.moe.moe_layer | cpu time: 16.658447265625, gpu time: 1357.163917541504
+2024-07-10 00:25:03 | INFO | fairseq.modules.moe.moe_layer | cpu time: 17.27490234375, gpu time: 1354.4319200515747
+2024-07-10 00:25:03 | INFO | fairseq.modules.moe.moe_layer | cpu time: 17.56298828125, gpu time: 1340.1514463424683
+2024-07-10 00:25:04 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3532.169921875, gpu time: 4942.208231925964
+2024-07-10 00:25:04 | INFO | fairseq.modules.moe.moe_layer | cpu time: 19.255615234375, gpu time: 1376.390157699585
+2024-07-10 00:25:04 | INFO | fairseq.modules.moe.moe_layer | cpu time: 17.671630859375, gpu time: 1391.4876108169556
+2024-07-10 00:25:04 | INFO | fairseq.modules.moe.moe_layer | cpu time: 17.13427734375, gpu time: 1385.7701663970947
+2024-07-10 00:25:04 | INFO | fairseq.modules.moe.moe_layer | cpu time: 17.95166015625, gpu time: 1378.6202478408813
+2024-07-10 00:25:04 | INFO | fairseq.modules.moe.moe_layer | cpu time: 18.07763671875, gpu time: 1374.3282585144043
+2024-07-10 00:25:04 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3532.716064453125, gpu time: 4974.363923072815
+2024-07-10 00:25:05 | INFO | fairseq.modules.moe.moe_layer | cpu time: 19.860107421875, gpu time: 1400.469045639038
+2024-07-10 00:25:05 | INFO | fairseq.modules.moe.moe_layer | cpu time: 18.16357421875, gpu time: 1423.7645807266235
+2024-07-10 00:25:05 | INFO | fairseq.modules.moe.moe_layer | cpu time: 17.614501953125, gpu time: 1417.6800966262817
+2024-07-10 00:25:05 | INFO | fairseq.modules.moe.moe_layer | cpu time: 18.416748046875, gpu time: 1402.9440956115723
+2024-07-10 00:25:05 | INFO | fairseq.modules.moe.moe_layer | cpu time: 18.603271484375, gpu time: 1398.7533864974976
+2024-07-10 00:25:05 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3533.194580078125, gpu time: 5006.482653617859
+2024-07-10 00:25:05 | INFO | fairseq.modules.moe.moe_layer | cpu time: 20.318603515625, gpu time: 1431.095136642456
+2024-07-10 00:25:06 | INFO | fairseq.modules.moe.moe_layer | cpu time: 18.63720703125, gpu time: 1448.195149421692
+2024-07-10 00:25:06 | INFO | fairseq.modules.moe.moe_layer | cpu time: 18.1337890625, gpu time: 1450.070348739624
+2024-07-10 00:25:06 | INFO | fairseq.modules.moe.moe_layer | cpu time: 18.86767578125, gpu time: 1428.1701850891113
+2024-07-10 00:25:06 | INFO | fairseq.modules.moe.moe_layer | cpu time: 19.078369140625, gpu time: 1431.9452390670776
+2024-07-10 00:25:06 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3533.863525390625, gpu time: 5032.03258228302
+2024-07-10 00:25:06 | INFO | fairseq.modules.moe.moe_layer | cpu time: 20.931884765625, gpu time: 1461.914345741272
+2024-07-10 00:25:06 | INFO | fairseq.modules.moe.moe_layer | cpu time: 19.204833984375, gpu time: 1488.4921216964722
+2024-07-10 00:25:07 | INFO | fairseq.modules.moe.moe_layer | cpu time: 18.6123046875, gpu time: 1481.957239151001
+2024-07-10 00:25:07 | INFO | fairseq.modules.moe.moe_layer | cpu time: 19.37060546875, gpu time: 1457.7941942214966
+2024-07-10 00:25:07 | INFO | fairseq.modules.moe.moe_layer | cpu time: 19.543701171875, gpu time: 1466.9334115982056
+2024-07-10 00:25:07 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3534.368896484375, gpu time: 5066.479154586792
+2024-07-10 00:25:07 | INFO | fairseq.modules.moe.moe_layer | cpu time: 21.372314453125, gpu time: 1487.5548343658447
+2024-07-10 00:25:07 | INFO | fairseq.modules.moe.moe_layer | cpu time: 19.744140625, gpu time: 1527.2668542861938
+2024-07-10 00:25:07 | INFO | fairseq.modules.moe.moe_layer | cpu time: 19.100341796875, gpu time: 1512.221890449524
+2024-07-10 00:25:08 | INFO | fairseq.modules.moe.moe_layer | cpu time: 19.878173828125, gpu time: 1488.416443824768
+2024-07-10 00:25:08 | INFO | fairseq.modules.moe.moe_layer | cpu time: 20.052001953125, gpu time: 1498.039665222168
+2024-07-10 00:25:08 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3534.9501953125, gpu time: 5097.137726783752
+2024-07-10 00:25:08 | INFO | fairseq.modules.moe.moe_layer | cpu time: 21.830078125, gpu time: 1517.9567651748657
+2024-07-10 00:25:08 | INFO | fairseq.modules.moe.moe_layer | cpu time: 20.2861328125, gpu time: 1562.1606283187866
+2024-07-10 00:25:08 | INFO | fairseq.modules.moe.moe_layer | cpu time: 19.77978515625, gpu time: 1542.660140991211
+2024-07-10 00:25:09 | INFO | fairseq.modules.moe.moe_layer | cpu time: 20.414794921875, gpu time: 1521.5041360855103
+2024-07-10 00:25:09 | INFO | fairseq.modules.moe.moe_layer | cpu time: 20.523193359375, gpu time: 1527.064796447754
+2024-07-10 00:25:09 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3535.468505859375, gpu time: 5130.396940231323
+2024-07-10 00:25:09 | INFO | fairseq.modules.moe.moe_layer | cpu time: 22.536865234375, gpu time: 1542.5143728256226
+2024-07-10 00:25:09 | INFO | fairseq.modules.moe.moe_layer | cpu time: 20.80419921875, gpu time: 1588.3812770843506
+2024-07-10 00:25:09 | INFO | fairseq.modules.moe.moe_layer | cpu time: 20.310302734375, gpu time: 1568.8292713165283
+2024-07-10 00:25:09 | INFO | fairseq.modules.moe.moe_layer | cpu time: 20.98046875, gpu time: 1556.470708847046
+2024-07-10 00:25:10 | INFO | fairseq.modules.moe.moe_layer | cpu time: 21.0263671875, gpu time: 1551.243525505066
+2024-07-10 00:25:10 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3536.043701171875, gpu time: 5157.066390037537
+2024-07-10 00:25:10 | INFO | fairseq.modules.moe.moe_layer | cpu time: 23.044921875, gpu time: 1574.1401462554932
+2024-07-10 00:25:10 | INFO | fairseq.modules.moe.moe_layer | cpu time: 21.487548828125, gpu time: 1612.7406454086304
+2024-07-10 00:25:10 | INFO | fairseq.modules.moe.moe_layer | cpu time: 20.82177734375, gpu time: 1599.1281623840332
+2024-07-10 00:25:10 | INFO | fairseq.modules.moe.moe_layer | cpu time: 21.616455078125, gpu time: 1580.6513576507568
+2024-07-10 00:25:10 | INFO | fairseq.modules.moe.moe_layer | cpu time: 21.566650390625, gpu time: 1578.4598560333252
+2024-07-10 00:25:11 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3536.72509765625, gpu time: 5184.39312171936
+2024-07-10 00:25:11 | INFO | fairseq.modules.moe.moe_layer | cpu time: 23.692138671875, gpu time: 1598.2753553390503
+2024-07-10 00:25:11 | INFO | fairseq.modules.moe.moe_layer | cpu time: 21.99609375, gpu time: 1643.2668991088867
+2024-07-10 00:25:11 | INFO | fairseq.modules.moe.moe_layer | cpu time: 21.346435546875, gpu time: 1624.1937713623047
+2024-07-10 00:25:11 | INFO | fairseq.modules.moe.moe_layer | cpu time: 22.12109375, gpu time: 1604.9723253250122
+2024-07-10 00:25:11 | INFO | fairseq.modules.moe.moe_layer | cpu time: 22.23388671875, gpu time: 1607.3854665756226
+2024-07-10 00:25:11 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3537.23046875, gpu time: 5208.56289100647
+2024-07-10 00:25:12 | INFO | fairseq.modules.moe.moe_layer | cpu time: 24.220703125, gpu time: 1635.8776121139526
+2024-07-10 00:25:12 | INFO | fairseq.modules.moe.moe_layer | cpu time: 22.625244140625, gpu time: 1667.5307483673096
+2024-07-10 00:25:12 | INFO | fairseq.modules.moe.moe_layer | cpu time: 21.889404296875, gpu time: 1654.812825202942
+2024-07-10 00:25:12 | INFO | fairseq.modules.moe.moe_layer | cpu time: 22.573486328125, gpu time: 1638.0769786834717
+2024-07-10 00:25:12 | INFO | fairseq.modules.moe.moe_layer | cpu time: 22.8603515625, gpu time: 1638.3728399276733
+2024-07-10 00:25:12 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3537.806640625, gpu time: 5254.5453090667725
+2024-07-10 00:25:12 | INFO | fairseq.modules.moe.moe_layer | cpu time: 24.74169921875, gpu time: 1668.7664270401
+2024-07-10 00:25:13 | INFO | fairseq.modules.moe.moe_layer | cpu time: 23.09765625, gpu time: 1694.6440391540527
+2024-07-10 00:25:13 | INFO | fairseq.modules.moe.moe_layer | cpu time: 22.4345703125, gpu time: 1688.051399230957
+2024-07-10 00:25:13 | INFO | fairseq.modules.moe.moe_layer | cpu time: 23.16357421875, gpu time: 1671.0494737625122
+2024-07-10 00:25:13 | INFO | fairseq.modules.moe.moe_layer | cpu time: 23.489501953125, gpu time: 1671.4192543029785
+2024-07-10 00:25:13 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3538.431396484375, gpu time: 5285.701323509216
+2024-07-10 00:25:13 | INFO | fairseq.modules.moe.moe_layer | cpu time: 25.5146484375, gpu time: 1702.285319328308
+2024-07-10 00:25:13 | INFO | fairseq.modules.moe.moe_layer | cpu time: 23.717041015625, gpu time: 1724.1320514678955
+2024-07-10 00:25:14 | INFO | fairseq.modules.moe.moe_layer | cpu time: 22.95703125, gpu time: 1725.383092880249
+2024-07-10 00:25:14 | INFO | fairseq.modules.moe.moe_layer | cpu time: 23.748046875, gpu time: 1701.5344467163086
+2024-07-10 00:25:14 | INFO | fairseq.modules.moe.moe_layer | cpu time: 24.063232421875, gpu time: 1701.8071069717407
+2024-07-10 00:25:14 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3539.041259765625, gpu time: 5317.732858657837
+2024-07-10 00:25:14 | INFO | fairseq.modules.moe.moe_layer | cpu time: 26.1630859375, gpu time: 1739.6062955856323
+2024-07-10 00:25:14 | INFO | fairseq.modules.moe.moe_layer | cpu time: 24.11865234375, gpu time: 1754.593183517456
+2024-07-10 00:25:15 | INFO | fairseq.modules.moe.moe_layer | cpu time: 23.314208984375, gpu time: 1757.3784656524658
+2024-07-10 00:25:15 | INFO | fairseq.modules.moe.moe_layer | cpu time: 24.134521484375, gpu time: 1739.800064086914
+2024-07-10 00:25:15 | INFO | fairseq.modules.moe.moe_layer | cpu time: 24.74072265625, gpu time: 1732.6816806793213
+2024-07-10 00:25:15 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3539.652587890625, gpu time: 5355.4419956207275
+2024-07-10 00:25:15 | INFO | fairseq.modules.moe.moe_layer | cpu time: 26.693115234375, gpu time: 1771.671109199524
+2024-07-10 00:25:15 | INFO | fairseq.modules.moe.moe_layer | cpu time: 24.74462890625, gpu time: 1778.664713859558
+2024-07-10 00:25:15 | INFO | fairseq.modules.moe.moe_layer | cpu time: 23.83203125, gpu time: 1789.1907987594604
+2024-07-10 00:25:16 | INFO | fairseq.modules.moe.moe_layer | cpu time: 24.462158203125, gpu time: 1773.254958152771
+2024-07-10 00:25:16 | INFO | fairseq.modules.moe.moe_layer | cpu time: 25.057373046875, gpu time: 1771.8128957748413
+2024-07-10 00:25:16 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3540.2626953125, gpu time: 5386.319447517395
+2024-07-10 00:25:16 | INFO | fairseq.modules.moe.moe_layer | cpu time: 27.23046875, gpu time: 1805.1080827713013
+2024-07-10 00:25:16 | INFO | fairseq.modules.moe.moe_layer | cpu time: 25.315673828125, gpu time: 1808.3703260421753
+2024-07-10 00:25:16 | INFO | fairseq.modules.moe.moe_layer | cpu time: 24.962890625, gpu time: 1894.9575700759888
+2024-07-10 00:25:17 | INFO | fairseq.modules.moe.moe_layer | cpu time: 25.115966796875, gpu time: 1809.1575345993042
+2024-07-10 00:25:17 | INFO | fairseq.modules.moe.moe_layer | cpu time: 25.622314453125, gpu time: 1809.85387134552
+2024-07-10 00:25:17 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3540.826171875, gpu time: 5427.206826210022
+2024-07-10 00:25:17 | INFO | fairseq.modules.moe.moe_layer | cpu time: 27.842041015625, gpu time: 1840.7762575149536
+2024-07-10 00:25:17 | INFO | fairseq.modules.moe.moe_layer | cpu time: 25.905029296875, gpu time: 1839.51113986969
+2024-07-10 00:25:17 | INFO | fairseq.modules.moe.moe_layer | cpu time: 25.601318359375, gpu time: 1940.5831899642944
+2024-07-10 00:25:17 | INFO | fairseq.modules.moe.moe_layer | cpu time: 25.6474609375, gpu time: 1841.2095489501953
+2024-07-10 00:25:18 | INFO | fairseq.modules.moe.moe_layer | cpu time: 26.1640625, gpu time: 1842.3268461227417
+2024-07-10 00:25:18 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3541.43115234375, gpu time: 5469.4729261398315
+2024-07-10 00:25:18 | INFO | fairseq.modules.moe.moe_layer | cpu time: 28.3837890625, gpu time: 1875.4045934677124
+2024-07-10 00:25:18 | INFO | fairseq.modules.moe.moe_layer | cpu time: 26.521728515625, gpu time: 1872.307312965393
+2024-07-10 00:25:18 | INFO | fairseq.modules.moe.moe_layer | cpu time: 26.298095703125, gpu time: 1979.4769659042358
+2024-07-10 00:25:18 | INFO | fairseq.modules.moe.moe_layer | cpu time: 26.22607421875, gpu time: 1886.3444519042969
+2024-07-10 00:25:19 | INFO | fairseq.modules.moe.moe_layer | cpu time: 26.806396484375, gpu time: 1872.5929403305054
+2024-07-10 00:25:19 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3541.90869140625, gpu time: 5512.079026222229
+2024-07-10 00:25:19 | INFO | fairseq.modules.moe.moe_layer | cpu time: 28.946044921875, gpu time: 1919.9268522262573
+2024-07-10 00:25:19 | INFO | fairseq.modules.moe.moe_layer | cpu time: 27.07666015625, gpu time: 1907.4774084091187
+2024-07-10 00:25:19 | INFO | fairseq.modules.moe.moe_layer | cpu time: 26.873779296875, gpu time: 2016.7312231063843
+2024-07-10 00:25:19 | INFO | fairseq.modules.moe.moe_layer | cpu time: 26.796875, gpu time: 1919.3263864517212
+2024-07-10 00:25:19 | INFO | fairseq.modules.moe.moe_layer | cpu time: 27.351318359375, gpu time: 1899.5209522247314
+2024-07-10 00:25:20 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3542.537353515625, gpu time: 5546.947201728821
+2024-07-10 00:25:20 | INFO | fairseq.modules.moe.moe_layer | cpu time: 29.511474609375, gpu time: 1958.7907094955444
+2024-07-10 00:25:20 | INFO | fairseq.modules.moe.moe_layer | cpu time: 27.5703125, gpu time: 1938.3339023590088
+2024-07-10 00:25:20 | INFO | fairseq.modules.moe.moe_layer | cpu time: 27.42822265625, gpu time: 2042.852515220642
+2024-07-10 00:25:20 | INFO | fairseq.modules.moe.moe_layer | cpu time: 27.496337890625, gpu time: 1955.2328023910522
+2024-07-10 00:25:20 | INFO | fairseq.modules.moe.moe_layer | cpu time: 27.875, gpu time: 1933.110728263855
+2024-07-10 00:25:21 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3543.145263671875, gpu time: 5594.586745262146
+2024-07-10 00:25:21 | INFO | fairseq.modules.moe.moe_layer | cpu time: 30.12646484375, gpu time: 1988.7480030059814
+2024-07-10 00:25:21 | INFO | fairseq.modules.moe.moe_layer | cpu time: 28.246826171875, gpu time: 1962.74831199646
+2024-07-10 00:25:21 | INFO | fairseq.modules.moe.moe_layer | cpu time: 27.965576171875, gpu time: 2072.7691688537598
+2024-07-10 00:25:21 | INFO | fairseq.modules.moe.moe_layer | cpu time: 27.996826171875, gpu time: 1982.7952156066895
+2024-07-10 00:25:21 | INFO | fairseq.modules.moe.moe_layer | cpu time: 28.48583984375, gpu time: 1960.2973012924194
+2024-07-10 00:25:21 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3543.638671875, gpu time: 5623.940839767456
+2024-07-10 00:25:22 | INFO | fairseq.modules.moe.moe_layer | cpu time: 30.660400390625, gpu time: 2021.2752170562744
+2024-07-10 00:25:22 | INFO | fairseq.modules.moe.moe_layer | cpu time: 28.8759765625, gpu time: 2000.2132892608643
+2024-07-10 00:25:22 | INFO | fairseq.modules.moe.moe_layer | cpu time: 28.460693359375, gpu time: 2099.8125429153442
+2024-07-10 00:25:22 | INFO | fairseq.modules.moe.moe_layer | cpu time: 28.567138671875, gpu time: 2009.6166687011719
+2024-07-10 00:25:22 | INFO | fairseq.modules.moe.moe_layer | cpu time: 29.063232421875, gpu time: 1998.8421201705933
+2024-07-10 00:25:22 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3544.30126953125, gpu time: 5648.176691055298
+2024-07-10 00:25:22 | INFO | fairseq.modules.moe.moe_layer | cpu time: 31.3388671875, gpu time: 2048.15970993042
+2024-07-10 00:25:23 | INFO | fairseq.modules.moe.moe_layer | cpu time: 29.43603515625, gpu time: 2030.2163438796997
+2024-07-10 00:25:23 | INFO | fairseq.modules.moe.moe_layer | cpu time: 29.072021484375, gpu time: 2129.3435955047607
+2024-07-10 00:25:23 | INFO | fairseq.modules.moe.moe_layer | cpu time: 29.3427734375, gpu time: 2033.9552402496338
+2024-07-10 00:25:23 | INFO | fairseq.modules.moe.moe_layer | cpu time: 29.592041015625, gpu time: 2023.023733139038
+2024-07-10 00:25:23 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3544.65771484375, gpu time: 5679.550786018372
+2024-07-10 00:25:23 | INFO | fairseq.modules.moe.moe_layer | cpu time: 31.8720703125, gpu time: 2075.8715629577637
+2024-07-10 00:25:23 | INFO | fairseq.modules.moe.moe_layer | cpu time: 30.126953125, gpu time: 2063.942918777466
+2024-07-10 00:25:24 | INFO | fairseq.modules.moe.moe_layer | cpu time: 29.653564453125, gpu time: 2165.105852127075
+2024-07-10 00:25:24 | INFO | fairseq.modules.moe.moe_layer | cpu time: 30.015869140625, gpu time: 2068.384214401245
+2024-07-10 00:25:24 | INFO | fairseq.modules.moe.moe_layer | cpu time: 30.2490234375, gpu time: 2052.934308052063
+2024-07-10 00:25:24 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3545.271484375, gpu time: 5712.7658405303955
+2024-07-10 00:25:24 | INFO | fairseq.modules.moe.moe_layer | cpu time: 32.466796875, gpu time: 2106.6307764053345
+2024-07-10 00:25:24 | INFO | fairseq.modules.moe.moe_layer | cpu time: 30.732666015625, gpu time: 2089.5898122787476
+2024-07-10 00:25:25 | INFO | fairseq.modules.moe.moe_layer | cpu time: 30.337646484375, gpu time: 2198.9983491897583
+2024-07-10 00:25:25 | INFO | fairseq.modules.moe.moe_layer | cpu time: 30.603759765625, gpu time: 2101.688549041748
+2024-07-10 00:25:25 | INFO | fairseq.modules.moe.moe_layer | cpu time: 30.89208984375, gpu time: 2094.3528909683228
+2024-07-10 00:25:25 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3546.04296875, gpu time: 5749.22265625
+2024-07-10 00:25:25 | INFO | fairseq.modules.moe.moe_layer | cpu time: 33.092529296875, gpu time: 2145.0459966659546
+2024-07-10 00:25:25 | INFO | fairseq.modules.moe.moe_layer | cpu time: 31.320068359375, gpu time: 2127.550311088562
+2024-07-10 00:25:25 | INFO | fairseq.modules.moe.moe_layer | cpu time: 30.9267578125, gpu time: 2230.34588432312
+2024-07-10 00:25:26 | INFO | fairseq.modules.moe.moe_layer | cpu time: 31.335205078125, gpu time: 2133.580246925354
+2024-07-10 00:25:26 | INFO | fairseq.modules.moe.moe_layer | cpu time: 31.35888671875, gpu time: 2133.5037908554077
+2024-07-10 00:25:26 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3546.63818359375, gpu time: 5786.190994262695
+2024-07-10 00:25:26 | INFO | fairseq.modules.moe.moe_layer | cpu time: 33.72021484375, gpu time: 2179.7279319763184
+2024-07-10 00:25:26 | INFO | fairseq.modules.moe.moe_layer | cpu time: 31.9248046875, gpu time: 2167.857533454895
+2024-07-10 00:25:26 | INFO | fairseq.modules.moe.moe_layer | cpu time: 31.500244140625, gpu time: 2272.408306121826
+2024-07-10 00:25:27 | INFO | fairseq.modules.moe.moe_layer | cpu time: 34.2373046875, gpu time: 2162.681700706482
+2024-07-10 00:25:27 | INFO | fairseq.modules.moe.moe_layer | cpu time: 32.083740234375, gpu time: 2165.643808364868
+2024-07-10 00:25:27 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3547.268798828125, gpu time: 5818.022850036621
+2024-07-10 00:25:27 | INFO | fairseq.modules.moe.moe_layer | cpu time: 34.4267578125, gpu time: 2210.00186920166
+2024-07-10 00:25:27 | INFO | fairseq.modules.moe.moe_layer | cpu time: 32.70166015625, gpu time: 2202.4809103012085
+2024-07-10 00:25:27 | INFO | fairseq.modules.moe.moe_layer | cpu time: 32.118408203125, gpu time: 2306.3844842910767
+2024-07-10 00:25:27 | INFO | fairseq.modules.moe.moe_layer | cpu time: 34.820068359375, gpu time: 2197.338198661804
+2024-07-10 00:25:28 | INFO | fairseq.modules.moe.moe_layer | cpu time: 32.65771484375, gpu time: 2197.1700649261475
+2024-07-10 00:25:28 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3548.028076171875, gpu time: 5853.727509498596
+2024-07-10 00:25:28 | INFO | fairseq.modules.moe.moe_layer | cpu time: 35.008544921875, gpu time: 2250.785732269287
+2024-07-10 00:25:28 | INFO | fairseq.modules.moe.moe_layer | cpu time: 33.30224609375, gpu time: 2236.9815673828125
+2024-07-10 00:25:28 | INFO | fairseq.modules.moe.moe_layer | cpu time: 32.6845703125, gpu time: 2337.2136192321777
+2024-07-10 00:25:28 | INFO | fairseq.modules.moe.moe_layer | cpu time: 35.1552734375, gpu time: 2238.5511808395386
+2024-07-10 00:25:28 | INFO | fairseq.modules.moe.moe_layer | cpu time: 32.994140625, gpu time: 2236.732807159424
+2024-07-10 00:25:29 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3548.450927734375, gpu time: 5890.470889091492
+2024-07-10 00:25:29 | INFO | fairseq.modules.moe.moe_layer | cpu time: 35.404296875, gpu time: 2283.147029876709
+2024-07-10 00:25:29 | INFO | fairseq.modules.moe.moe_layer | cpu time: 33.622314453125, gpu time: 2271.2612657546997
+2024-07-10 00:25:29 | INFO | fairseq.modules.moe.moe_layer | cpu time: 33.0107421875, gpu time: 2374.0955600738525
+2024-07-10 00:25:29 | INFO | fairseq.modules.moe.moe_layer | cpu time: 35.49658203125, gpu time: 2275.244641304016
+2024-07-10 00:25:29 | INFO | fairseq.modules.moe.moe_layer | cpu time: 33.470947265625, gpu time: 2283.2555541992188
+2024-07-10 00:25:30 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3548.822998046875, gpu time: 5926.857306480408
+2024-07-10 00:25:30 | INFO | fairseq.modules.moe.moe_layer | cpu time: 35.86474609375, gpu time: 2325.620653152466
+2024-07-10 00:25:30 | INFO | fairseq.modules.moe.moe_layer | cpu time: 34.0107421875, gpu time: 2313.6326475143433
+2024-07-10 00:25:30 | INFO | fairseq.modules.moe.moe_layer | cpu time: 33.382568359375, gpu time: 2417.973503112793
+2024-07-10 00:25:30 | INFO | fairseq.modules.moe.moe_layer | cpu time: 35.830810546875, gpu time: 2310.366099357605
+2024-07-10 00:25:30 | INFO | fairseq.modules.moe.moe_layer | cpu time: 34.150146484375, gpu time: 2321.2122173309326
+2024-07-10 00:25:31 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3549.48583984375, gpu time: 5961.305488586426
+2024-07-10 00:25:31 | INFO | fairseq.modules.moe.moe_layer | cpu time: 36.489013671875, gpu time: 2358.237470626831
+2024-07-10 00:25:31 | INFO | fairseq.modules.moe.moe_layer | cpu time: 34.728271484375, gpu time: 2350.8760290145874
+2024-07-10 00:25:31 | INFO | fairseq.modules.moe.moe_layer | cpu time: 33.991455078125, gpu time: 2454.505683898926
+2024-07-10 00:25:31 | INFO | fairseq.modules.moe.moe_layer | cpu time: 36.49462890625, gpu time: 2349.8803606033325
+2024-07-10 00:25:31 | INFO | fairseq.modules.moe.moe_layer | cpu time: 34.923095703125, gpu time: 2351.5080757141113
+2024-07-10 00:25:31 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3550.258544921875, gpu time: 5993.110945701599
+2024-07-10 00:25:32 | INFO | fairseq.modules.moe.moe_layer | cpu time: 37.0693359375, gpu time: 2391.736050605774
+2024-07-10 00:25:32 | INFO | fairseq.modules.moe.moe_layer | cpu time: 35.51318359375, gpu time: 2388.773970603943
+2024-07-10 00:25:32 | INFO | fairseq.modules.moe.moe_layer | cpu time: 34.5927734375, gpu time: 2492.4037857055664
+2024-07-10 00:25:32 | INFO | fairseq.modules.moe.moe_layer | cpu time: 37.257080078125, gpu time: 2388.119261741638
+2024-07-10 00:25:32 | INFO | fairseq.modules.moe.moe_layer | cpu time: 35.558837890625, gpu time: 2391.4448986053467
+2024-07-10 00:25:32 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3551.049560546875, gpu time: 6025.251443862915
+2024-07-10 00:25:33 | INFO | fairseq.modules.moe.moe_layer | cpu time: 37.603271484375, gpu time: 2426.5336713790894
+2024-07-10 00:25:33 | INFO | fairseq.modules.moe.moe_layer | cpu time: 35.854736328125, gpu time: 2420.9327087402344
+2024-07-10 00:25:33 | INFO | fairseq.modules.moe.moe_layer | cpu time: 34.953369140625, gpu time: 2521.0865211486816
+2024-07-10 00:25:33 | INFO | fairseq.modules.moe.moe_layer | cpu time: 37.838623046875, gpu time: 2418.115919113159
+2024-07-10 00:25:33 | INFO | fairseq.modules.moe.moe_layer | cpu time: 36.1640625, gpu time: 2418.9489135742188
+2024-07-10 00:25:33 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3551.638427734375, gpu time: 6052.260740280151
+2024-07-10 00:25:33 | INFO | fairseq.modules.moe.moe_layer | cpu time: 38.17431640625, gpu time: 2453.562005996704
+2024-07-10 00:25:34 | INFO | fairseq.modules.moe.moe_layer | cpu time: 36.554443359375, gpu time: 2450.491925239563
+2024-07-10 00:25:34 | INFO | fairseq.modules.moe.moe_layer | cpu time: 35.63525390625, gpu time: 2547.79949760437
+2024-07-10 00:25:34 | INFO | fairseq.modules.moe.moe_layer | cpu time: 38.533447265625, gpu time: 2442.4780130386353
+2024-07-10 00:25:34 | INFO | fairseq.modules.moe.moe_layer | cpu time: 36.80712890625, gpu time: 2444.381887435913
+2024-07-10 00:25:34 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3552.4677734375, gpu time: 6082.173716545105
+2024-07-10 00:25:34 | INFO | fairseq.modules.moe.moe_layer | cpu time: 38.954345703125, gpu time: 2478.9810609817505
+2024-07-10 00:25:35 | INFO | fairseq.modules.moe.moe_layer | cpu time: 37.1611328125, gpu time: 2476.610179901123
+2024-07-10 00:25:35 | INFO | fairseq.modules.moe.moe_layer | cpu time: 36.36083984375, gpu time: 2573.806713104248
+2024-07-10 00:25:35 | INFO | fairseq.modules.moe.moe_layer | cpu time: 39.244140625, gpu time: 2472.0343503952026
+2024-07-10 00:25:35 | INFO | fairseq.modules.moe.moe_layer | cpu time: 37.546142578125, gpu time: 2469.330062866211
+2024-07-10 00:25:35 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3553.25146484375, gpu time: 6107.945732116699
+2024-07-10 00:25:35 | INFO | fairseq.modules.moe.moe_layer | cpu time: 39.53369140625, gpu time: 2504.7164363861084
+2024-07-10 00:25:36 | INFO | fairseq.modules.moe.moe_layer | cpu time: 37.907958984375, gpu time: 2500.577554702759
+2024-07-10 00:25:36 | INFO | fairseq.modules.moe.moe_layer | cpu time: 36.9765625, gpu time: 2598.06400680542
+2024-07-10 00:25:36 | INFO | fairseq.modules.moe.moe_layer | cpu time: 39.59423828125, gpu time: 2496.723484992981
+2024-07-10 00:25:36 | INFO | fairseq.modules.moe.moe_layer | cpu time: 37.877685546875, gpu time: 2503.707844734192
+2024-07-10 00:25:36 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3553.662109375, gpu time: 6137.563190460205
+2024-07-10 00:25:36 | INFO | fairseq.modules.moe.moe_layer | cpu time: 39.872802734375, gpu time: 2532.1854133605957
+2024-07-10 00:25:36 | INFO | fairseq.modules.moe.moe_layer | cpu time: 38.248046875, gpu time: 2533.713095664978
+2024-07-10 00:25:37 | INFO | fairseq.modules.moe.moe_layer | cpu time: 37.349365234375, gpu time: 2627.7537841796875
+2024-07-10 00:25:37 | INFO | fairseq.modules.moe.moe_layer | cpu time: 40.15576171875, gpu time: 2533.9054288864136
+2024-07-10 00:25:37 | INFO | fairseq.modules.moe.moe_layer | cpu time: 38.23681640625, gpu time: 2535.8203449249268
+2024-07-10 00:25:37 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3554.066650390625, gpu time: 6179.2459354400635
+2024-07-10 00:25:37 | INFO | fairseq.modules.moe.moe_layer | cpu time: 40.586669921875, gpu time: 2563.326714515686
+2024-07-10 00:25:37 | INFO | fairseq.modules.moe.moe_layer | cpu time: 38.966552734375, gpu time: 2567.7748765945435
+2024-07-10 00:25:38 | INFO | fairseq.modules.moe.moe_layer | cpu time: 37.8984375, gpu time: 2669.214771270752
+2024-07-10 00:25:38 | INFO | fairseq.modules.moe.moe_layer | cpu time: 40.9228515625, gpu time: 2567.8515300750732
+2024-07-10 00:25:38 | INFO | fairseq.modules.moe.moe_layer | cpu time: 39.0546875, gpu time: 2570.0784454345703
+2024-07-10 00:25:38 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3554.73046875, gpu time: 6218.551078796387
+2024-07-10 00:25:38 | INFO | fairseq.modules.moe.moe_layer | cpu time: 41.352783203125, gpu time: 2597.366255760193
+2024-07-10 00:25:38 | INFO | fairseq.modules.moe.moe_layer | cpu time: 39.512939453125, gpu time: 2598.1568145751953
+2024-07-10 00:25:38 | INFO | fairseq.modules.moe.moe_layer | cpu time: 38.302734375, gpu time: 2710.770637512207
+2024-07-10 00:25:39 | INFO | fairseq.modules.moe.moe_layer | cpu time: 41.24365234375, gpu time: 2604.048833847046
+2024-07-10 00:25:39 | INFO | fairseq.modules.moe.moe_layer | cpu time: 39.3798828125, gpu time: 2599.611583709717
+2024-07-10 00:25:39 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3555.45263671875, gpu time: 6248.784538269043
+2024-07-10 00:25:39 | INFO | fairseq.modules.moe.moe_layer | cpu time: 42.085205078125, gpu time: 2628.4421157836914
+2024-07-10 00:25:39 | INFO | fairseq.modules.moe.moe_layer | cpu time: 40.146728515625, gpu time: 2629.9253129959106
+2024-07-10 00:25:39 | INFO | fairseq.modules.moe.moe_layer | cpu time: 39.0224609375, gpu time: 2746.1628189086914
+2024-07-10 00:25:40 | INFO | fairseq.modules.moe.moe_layer | cpu time: 41.96435546875, gpu time: 2703.5631427764893
+2024-07-10 00:25:40 | INFO | fairseq.modules.moe.moe_layer | cpu time: 39.82421875, gpu time: 2627.8216819763184
+2024-07-10 00:25:40 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3556.28857421875, gpu time: 6285.073843002319
+2024-07-10 00:25:40 | INFO | fairseq.modules.moe.moe_layer | cpu time: 42.833740234375, gpu time: 2658.4866161346436
+2024-07-10 00:25:40 | INFO | fairseq.modules.moe.moe_layer | cpu time: 40.7919921875, gpu time: 2662.8606939315796
+2024-07-10 00:25:40 | INFO | fairseq.modules.moe.moe_layer | cpu time: 39.419921875, gpu time: 2773.502996444702
+2024-07-10 00:25:41 | INFO | fairseq.modules.moe.moe_layer | cpu time: 42.664306640625, gpu time: 2736.547164916992
+2024-07-10 00:25:41 | INFO | fairseq.modules.moe.moe_layer | cpu time: 40.45947265625, gpu time: 2658.6628217697144
+2024-07-10 00:25:41 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3557.02880859375, gpu time: 6310.12601852417
+2024-07-10 00:25:41 | INFO | fairseq.modules.moe.moe_layer | cpu time: 43.6513671875, gpu time: 2691.944076538086
+2024-07-10 00:25:41 | INFO | fairseq.modules.moe.moe_layer | cpu time: 41.3984375, gpu time: 2703.3728818893433
+2024-07-10 00:25:41 | INFO | fairseq.modules.moe.moe_layer | cpu time: 40.135986328125, gpu time: 2803.2650966644287
+2024-07-10 00:25:41 | INFO | fairseq.modules.moe.moe_layer | cpu time: 43.27490234375, gpu time: 2774.1559886932373
+2024-07-10 00:25:42 | INFO | fairseq.modules.moe.moe_layer | cpu time: 41.12744140625, gpu time: 2689.640601158142
+2024-07-10 00:25:42 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3557.7119140625, gpu time: 6347.02684211731
+2024-07-10 00:25:42 | INFO | fairseq.modules.moe.moe_layer | cpu time: 44.224365234375, gpu time: 2718.824733734131
+2024-07-10 00:25:42 | INFO | fairseq.modules.moe.moe_layer | cpu time: 42.145751953125, gpu time: 2741.6525869369507
+2024-07-10 00:25:42 | INFO | fairseq.modules.moe.moe_layer | cpu time: 40.7568359375, gpu time: 2842.8006439208984
+2024-07-10 00:25:42 | INFO | fairseq.modules.moe.moe_layer | cpu time: 44.02734375, gpu time: 2805.608968734741
+2024-07-10 00:25:43 | INFO | fairseq.modules.moe.moe_layer | cpu time: 41.64794921875, gpu time: 2719.85982131958
+2024-07-10 00:25:43 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3558.380859375, gpu time: 6384.693105697632
+2024-07-10 00:25:43 | INFO | fairseq.modules.moe.moe_layer | cpu time: 44.873046875, gpu time: 2750.483793258667
+2024-07-10 00:25:43 | INFO | fairseq.modules.moe.moe_layer | cpu time: 42.7607421875, gpu time: 2771.109405517578
+2024-07-10 00:25:43 | INFO | fairseq.modules.moe.moe_layer | cpu time: 41.4619140625, gpu time: 2875.7685050964355
+2024-07-10 00:25:43 | INFO | fairseq.modules.moe.moe_layer | cpu time: 44.685791015625, gpu time: 2843.1961936950684
+2024-07-10 00:25:43 | INFO | fairseq.modules.moe.moe_layer | cpu time: 42.26171875, gpu time: 2750.9844827651978
+2024-07-10 00:25:44 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3559.066650390625, gpu time: 6415.30992603302
+2024-07-10 00:25:44 | INFO | fairseq.modules.moe.moe_layer | cpu time: 45.480712890625, gpu time: 2787.768455505371
+2024-07-10 00:25:44 | INFO | fairseq.modules.moe.moe_layer | cpu time: 43.471435546875, gpu time: 2806.241428375244
+2024-07-10 00:25:44 | INFO | fairseq.modules.moe.moe_layer | cpu time: 42.1435546875, gpu time: 2901.1662826538086
+2024-07-10 00:25:44 | INFO | fairseq.modules.moe.moe_layer | cpu time: 45.319091796875, gpu time: 2875.292534828186
+2024-07-10 00:25:44 | INFO | fairseq.modules.moe.moe_layer | cpu time: 42.85986328125, gpu time: 2783.142744064331
+2024-07-10 00:25:45 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3559.71142578125, gpu time: 6455.281952857971
+2024-07-10 00:25:45 | INFO | fairseq.modules.moe.moe_layer | cpu time: 46.27978515625, gpu time: 2824.6383991241455
+2024-07-10 00:25:45 | INFO | fairseq.modules.moe.moe_layer | cpu time: 44.094970703125, gpu time: 2837.354248046875
+2024-07-10 00:25:45 | INFO | fairseq.modules.moe.moe_layer | cpu time: 42.74169921875, gpu time: 2935.7720642089844
+2024-07-10 00:25:45 | INFO | fairseq.modules.moe.moe_layer | cpu time: 45.9619140625, gpu time: 2900.095911026001
+2024-07-10 00:25:45 | INFO | fairseq.modules.moe.moe_layer | cpu time: 43.602783203125, gpu time: 2818.1808471679688
+2024-07-10 00:25:45 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3560.323974609375, gpu time: 6488.92645740509
+2024-07-10 00:25:46 | INFO | fairseq.modules.moe.moe_layer | cpu time: 46.942138671875, gpu time: 2866.331386566162
+2024-07-10 00:25:46 | INFO | fairseq.modules.moe.moe_layer | cpu time: 44.58935546875, gpu time: 2869.438588142395
+2024-07-10 00:25:46 | INFO | fairseq.modules.moe.moe_layer | cpu time: 43.1337890625, gpu time: 2975.7399311065674
+2024-07-10 00:25:46 | INFO | fairseq.modules.moe.moe_layer | cpu time: 46.350830078125, gpu time: 2940.3109760284424
+2024-07-10 00:25:46 | INFO | fairseq.modules.moe.moe_layer | cpu time: 43.9658203125, gpu time: 2848.663106918335
+2024-07-10 00:25:46 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3561.141357421875, gpu time: 6518.442636489868
+2024-07-10 00:25:47 | INFO | fairseq.modules.moe.moe_layer | cpu time: 47.66162109375, gpu time: 2898.89412689209
+2024-07-10 00:25:47 | INFO | fairseq.modules.moe.moe_layer | cpu time: 45.232666015625, gpu time: 2896.8826055526733
+2024-07-10 00:25:47 | INFO | fairseq.modules.moe.moe_layer | cpu time: 43.83544921875, gpu time: 3006.4988327026367
+2024-07-10 00:25:47 | INFO | fairseq.modules.moe.moe_layer | cpu time: 46.993408203125, gpu time: 2970.1217155456543
+2024-07-10 00:25:47 | INFO | fairseq.modules.moe.moe_layer | cpu time: 44.6806640625, gpu time: 2874.200083732605
+2024-07-10 00:25:47 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3561.869873046875, gpu time: 6542.773532867432
+2024-07-10 00:25:47 | INFO | fairseq.modules.moe.moe_layer | cpu time: 48.090576171875, gpu time: 2925.6525449752808
+2024-07-10 00:25:48 | INFO | fairseq.modules.moe.moe_layer | cpu time: 45.594482421875, gpu time: 2923.808382987976
+2024-07-10 00:25:48 | INFO | fairseq.modules.moe.moe_layer | cpu time: 44.218017578125, gpu time: 3041.6242961883545
+2024-07-10 00:25:48 | INFO | fairseq.modules.moe.moe_layer | cpu time: 47.725830078125, gpu time: 2994.5617322921753
+2024-07-10 00:25:48 | INFO | fairseq.modules.moe.moe_layer | cpu time: 45.498046875, gpu time: 2898.380100250244
+2024-07-10 00:25:48 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3562.638427734375, gpu time: 6569.19003200531
+2024-07-10 00:25:48 | INFO | fairseq.modules.moe.moe_layer | cpu time: 48.814208984375, gpu time: 2950.125202178955
+2024-07-10 00:25:49 | INFO | fairseq.modules.moe.moe_layer | cpu time: 46.2509765625, gpu time: 2949.83975982666
+2024-07-10 00:25:49 | INFO | fairseq.modules.moe.moe_layer | cpu time: 44.8505859375, gpu time: 3066.8363132476807
+2024-07-10 00:25:49 | INFO | fairseq.modules.moe.moe_layer | cpu time: 48.420166015625, gpu time: 3025.681914329529
+2024-07-10 00:25:49 | INFO | fairseq.modules.moe.moe_layer | cpu time: 46.203125, gpu time: 2930.2142028808594
+2024-07-10 00:25:49 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3563.37939453125, gpu time: 6596.592610359192
+2024-07-10 00:25:49 | INFO | fairseq.modules.moe.moe_layer | cpu time: 49.513427734375, gpu time: 2974.3280992507935
+2024-07-10 00:25:49 | INFO | fairseq.modules.moe.moe_layer | cpu time: 47.041259765625, gpu time: 2973.54345703125
+2024-07-10 00:25:50 | INFO | fairseq.modules.moe.moe_layer | cpu time: 45.667236328125, gpu time: 3094.3830528259277
+2024-07-10 00:25:50 | INFO | fairseq.modules.moe.moe_layer | cpu time: 49.17041015625, gpu time: 3052.9632120132446
+2024-07-10 00:25:50 | INFO | fairseq.modules.moe.moe_layer | cpu time: 46.877197265625, gpu time: 2958.621742248535
+2024-07-10 00:25:50 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3564.04150390625, gpu time: 6629.793272972107
+2024-07-10 00:25:50 | INFO | fairseq.modules.moe.moe_layer | cpu time: 50.328125, gpu time: 3002.281558036804
+2024-07-10 00:25:50 | INFO | fairseq.modules.moe.moe_layer | cpu time: 47.8505859375, gpu time: 2997.9855527877808
+2024-07-10 00:25:50 | INFO | fairseq.modules.moe.moe_layer | cpu time: 46.237548828125, gpu time: 3127.1312370300293
+2024-07-10 00:25:51 | INFO | fairseq.modules.moe.moe_layer | cpu time: 49.947998046875, gpu time: 3077.261149406433
+2024-07-10 00:25:51 | INFO | fairseq.modules.moe.moe_layer | cpu time: 47.60400390625, gpu time: 2982.8132791519165
+2024-07-10 00:25:51 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3564.751953125, gpu time: 6655.60929107666
+2024-07-10 00:25:51 | INFO | fairseq.modules.moe.moe_layer | cpu time: 50.97216796875, gpu time: 3026.132134437561
+2024-07-10 00:25:51 | INFO | fairseq.modules.moe.moe_layer | cpu time: 48.513427734375, gpu time: 3022.3828496932983
+2024-07-10 00:25:51 | INFO | fairseq.modules.moe.moe_layer | cpu time: 46.882568359375, gpu time: 3156.4643783569336
+2024-07-10 00:25:52 | INFO | fairseq.modules.moe.moe_layer | cpu time: 50.63916015625, gpu time: 3105.781807899475
+2024-07-10 00:25:52 | INFO | fairseq.modules.moe.moe_layer | cpu time: 48.35205078125, gpu time: 3013.201621055603
+2024-07-10 00:25:52 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3565.511962890625, gpu time: 6684.689792633057
+2024-07-10 00:25:52 | INFO | fairseq.modules.moe.moe_layer | cpu time: 51.70458984375, gpu time: 3056.084315299988
+2024-07-10 00:25:52 | INFO | fairseq.modules.moe.moe_layer | cpu time: 49.161865234375, gpu time: 3047.703667640686
+2024-07-10 00:25:52 | INFO | fairseq.modules.moe.moe_layer | cpu time: 47.677978515625, gpu time: 3186.8888788223267
+2024-07-10 00:25:52 | INFO | fairseq.modules.moe.moe_layer | cpu time: 51.29052734375, gpu time: 3141.5357522964478
+2024-07-10 00:25:53 | INFO | fairseq.modules.moe.moe_layer | cpu time: 48.990478515625, gpu time: 3045.9998836517334
+2024-07-10 00:25:53 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3566.0712890625, gpu time: 6714.758934020996
+2024-07-10 00:25:53 | INFO | fairseq.modules.moe.moe_layer | cpu time: 52.10498046875, gpu time: 3088.2292976379395
+2024-07-10 00:25:53 | INFO | fairseq.modules.moe.moe_layer | cpu time: 49.53466796875, gpu time: 3079.3043308258057
+2024-07-10 00:25:53 | INFO | fairseq.modules.moe.moe_layer | cpu time: 48.1162109375, gpu time: 3212.712417602539
+2024-07-10 00:25:53 | INFO | fairseq.modules.moe.moe_layer | cpu time: 52.046875, gpu time: 3165.851929664612
+2024-07-10 00:25:54 | INFO | fairseq.modules.moe.moe_layer | cpu time: 49.80126953125, gpu time: 3083.633668899536
+2024-07-10 00:25:54 | INFO | fairseq.modules.moe.moe_layer | cpu time: 3566.647705078125, gpu time: 6758.187286376953
+2024-07-10 00:25:54 | INFO | fairseq.modules.moe.moe_layer | cpu time: 52.81494140625, gpu time: 3118.6025972366333
+2024-07-10 00:25:54 | INFO | fairseq.modules.moe.moe_layer | cpu time: 50.2578125, gpu time: 3109.848834991455
+2024-07-10 00:25:54 | INFO | fairseq.modules.moe.moe_layer | cpu time: 48.83935546875, gpu time: 3249.526361465454
+2024-07-10 00:25:54 | INFO | fairseq.modules.moe.moe_layer | cpu time: 52.7685546875, gpu time: 3193.356909751892
+2024-07-10 00:25:54 | INFO | fairseq.modules.moe.moe_layer | cpu time: 50.641845703125, gpu time: 3119.016893386841
+2024-07-10 00:25:54 | WARNING | fairseq_cli.eval_lm | Aggregating scores across the distributed world
+2024-07-10 00:25:54 | WARNING | fairseq_cli.eval_lm | Aggregating scores across the distributed world
+2024-07-10 00:25:54 | WARNING | fairseq_cli.eval_lm | Aggregating scores across the distributed world
+2024-07-10 00:25:54 | WARNING | fairseq_cli.eval_lm | Aggregating scores across the distributed world
+2024-07-10 00:25:54 | WARNING | fairseq_cli.eval_lm | Aggregating timer stats across the distributed world
+2024-07-10 00:25:54 | WARNING | fairseq_cli.eval_lm | Aggregating timer stats across the distributed world
+2024-07-10 00:25:54 | WARNING | fairseq_cli.eval_lm | Aggregating timer stats across the distributed world
+2024-07-10 00:25:54 | WARNING | fairseq_cli.eval_lm | Aggregating timer stats across the distributed world
+2024-07-10 00:25:54 | INFO | fairseq_cli.eval_lm | Evaluated 825,641 tokens in 119.9s (6885.36 tokens/s)
+2024-07-10 00:25:54 | INFO | fairseq_cli.eval_lm | valid Loss (base 2): 2.9061, Perplexity: 7.50
+/usr/lib64/python3.9/multiprocessing/resource_tracker.py:216: UserWarning: resource_tracker: There appear to be 4 leaked semaphore objects to clean up at shutdown
+  warnings.warn('resource_tracker: There appear to be %d '
