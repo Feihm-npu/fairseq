@@ -207,6 +207,7 @@ def top2gating(
     # gates has shape of SE
     num_tokens = gates.shape[0]
     num_experts = gates.shape[1]
+    # logger.info(f'gate function, number of experts {num_experts}')
     if moe_eval_capacity_token_fraction > 0.0 and eval_mode:
         capacity = math.ceil(moe_eval_capacity_token_fraction * num_tokens)
     else:

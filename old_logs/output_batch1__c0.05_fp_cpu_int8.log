@@ -1,0 +1,20 @@
+srun: Requested partition configuration not available now
+srun: ---------------------------------------------------------------
+srun: AMD HPC Fund Job Submission Filter
+srun: ---------------------------------------------------------------
+srun: --> ok: runtime limit specified
+srun: --> ok: Billing account-> research/hongmfei
+srun: --> checking job limits...
+srun:     --> requested runlimit = 7.0 hours (ok)
+srun: --> checking partition restrictions...
+srun:     --> ok: partition = mi1004x
+srun: --> checking job size restrictions...
+srun:     --> requested nodes = 4 (ok)
+srun: --> checking for active accounting allocation(s)...
+srun:     --> alloc_research_04012023_03312024 - EXPIRED: Sunday, March 31 2024
+srun:     --> alloc_research_04012024_03312025 - ACTIVE: expires on Monday, March 31 2025
+srun:     --> setting single active allocation to alloc_research_04012024_03312025 (ok)
+srun: job 57554 queued and waiting for resources
+srun: Job allocation 57554 has been revoked
+srun: Job allocation 57554 has been revoked
+srun: Force Terminated JobId=57554

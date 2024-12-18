@@ -20,7 +20,7 @@ logger = logging.getLogger(__name__)
 
 @dataclass
 class DummyLMConfig(FairseqDataclass):
-    dict_size: int = 49996
+    dict_size: int = 51195
     dataset_size: int = 100000
     tokens_per_sample: int = field(
         default=512, metadata={"help": "max sequence length"}

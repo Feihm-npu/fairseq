@@ -519,6 +519,17 @@ def transformer_lm_gpt(args):
     args.activation_fn = getattr(args, "activation_fn", "gelu")
     base_lm_architecture(args)
 
+@register_model_architecture("transformer_lm", "mixtral_v1")
+def transformer_lm_gpt(args):
+    args.decoder_embed_dim = getattr(args, "decoder_embed_dim", 4096)
+    args.decoder_ffn_embed_dim = getattr(args, "decoder_ffn_embed_dim", 14336)
+    args.decoder_layers = getattr(args, "decoder_layers", 32)
+    args.decoder_attention_heads = getattr(args, "decoder_attention_heads", 32)
+    args.dropout = getattr(args, "dropout", 0.1)
+    args.attention_dropout = getattr(args, "attention_dropout", 0.1)
+    args.activation_fn = getattr(args, "activation_fn", "gelu")
+    base_lm_architecture(args)
+
 
 @register_model_architecture("transformer_lm", "transformer_lm_gpt2_small")
 def transformer_lm_gpt2_small(args):

@@ -20,6 +20,73 @@ logger = logging.getLogger(__name__)
 def _linear(x, weight, bias=None):
     return F.linear(x, weight, bias)
 
+## Fei added for Mixtral
+from transformers import MixtralConfig
+from transformers.activations import ACT2FN
+class MixtralBlockSparseTop2MLP(nn.Module):
+    def __init__(self, config: MixtralConfig):
+        super().__init__()
+        self.ffn_dim = config.intermediate_size
+        self.hidden_dim = config.hidden_size
+
+        self.w1 = nn.Linear(self.hidden_dim, self.ffn_dim, bias=False)
+        self.w2 = nn.Linear(self.ffn_dim, self.hidden_dim, bias=False)
+        self.w3 = nn.Linear(self.hidden_dim, self.ffn_dim, bias=False)
+
+        self.act_fn = ACT2FN[config.hidden_act]
+
+    def forward(self, hidden_states):
+        current_hidden_states = self.act_fn(self.w1(hidden_states)) * self.w3(hidden_states)
+        current_hidden_states = self.w2(current_hidden_states)
+        return current_hidden_states
+
+class LayerNorm_Mixtral(nn.Module):
+    def __init__(self, normalized_shape, eps=1e-6, elementwise_affine=True):
+        """
+        LayerNorm_Mixtral implements RMS normalization within the LayerNorm framework.
+        It uses RMS normalization but keeps the elementwise affine transform optional.
+
+        Args:
+            normalized_shape (int or tuple): Input shape for normalization.
+            eps (float): A small value added for numerical stability.
+            elementwise_affine (bool): If True, includes learnable scale parameters.
+        """
+        super().__init__()
+        if isinstance(normalized_shape, int):
+            normalized_shape = (normalized_shape,)
+        self.normalized_shape = normalized_shape
+        self.eps = eps
+        self.elementwise_affine = elementwise_affine
+
+        if self.elementwise_affine:
+            self.weight = nn.Parameter(torch.ones(normalized_shape))
+            self.bias = nn.Parameter(torch.zeros(normalized_shape))
+        else:
+            self.register_parameter('weight', None)
+            self.register_parameter('bias', None)
+
+    def forward(self, x):
+        """Forward pass for LayerNorm_Mixtral."""
+        input_dtype = x.dtype
+        # Convert to float32 for numerical stability
+        x = x.to(torch.float32)
+
+        # Compute RMS normalization
+        variance = x.pow(2).mean(dim=-1, keepdim=True)
+        normalized_x = x * torch.rsqrt(variance + self.eps)
+
+        # Apply affine transformation if enabled
+        if self.elementwise_affine:
+            normalized_x = self.weight * normalized_x + self.bias
+
+        # Convert back to original dtype
+        return normalized_x.to(input_dtype)
+
+    def extra_repr(self):
+        return (f"{self.normalized_shape}, eps={self.eps}, "
+                f"elementwise_affine={self.elementwise_affine}")
+
+
 
 def _ffn(
     x,
@@ -350,7 +417,9 @@ class TransformerDecoderLayer(nn.Module):
         export = getattr(args, "char_inputs", False)
 
         self.self_attn_layer_norm = LayerNorm(self.embed_dim, export=export)
-
+        # Mixtral
+        # self.self_attn_layer_norm = LayerNorm_Mixtral(self.embed_dim)
+        
         if no_encoder_attn:
             self.encoder_attn = None
             self.encoder_attn_layer_norm = None
@@ -410,6 +479,9 @@ class TransformerDecoderLayer(nn.Module):
                 )
             experts = make_experts(args, self.embed_dim, ffn_dim, self.dropout_module)
             self.moe_layer = MOELayer(gate, experts, args)
+
+            # Here to modify the moe layer into the Mixtral one
+            # self.moe_layer = MOELayer_Mixtral(gate, experts, args)
 
 
         self.final_layer_norm = LayerNorm(self.embed_dim, export=export)
