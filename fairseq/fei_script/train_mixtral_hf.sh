@@ -1,16 +1,14 @@
 #!/usr/bin/env bash
 
-# 恢复模块环境，根据您的环境情况自行调整
 module restore
 
-# 激活虚拟环境
 source /work1/amd/hongmfei/moespace/.moefair/bin/activate
 
 cd /work1/amd/hongmfei/moespace/SPEED-main/fairseq
 
 export PYTORCH_HIP_ALLOC_CONF=expandable_segments:True
 
-# 确保FAIRSEQ_DIR正确
+# To get the fairseq path
 FAIRSEQ_DIR=$(pip list -v | grep 'fairseq' | awk '{print $3}')
 export PYTHONPATH=$PYTHONPATH:$FAIRSEQ_DIR
 
@@ -19,9 +17,7 @@ DATA_PATH=/work1/amd/hongmfei/raw_data/data-bin/wiki/
 NUM_EXPERTS=4
 TOKENS_PER_SAMPLE=2048
 
-# 使用我们刚才实现的mixtral_language_modeling任务与mixtral_lm架构
-# 在mixtral_lm.py中我们注册了model: mixtral_lm, 并有对应的arch: mixtral_lm_arch
-# 在mixtral_language_modeling.py中我们注册了task: mixtral_language_modeling
+
 python fairseq_cli/train.py \
   --task mixtral_language_modeling --hf-model-name mistralai/Mixtral-8x7B-v0.1 \
   $DATA_PATH \

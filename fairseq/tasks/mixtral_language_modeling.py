@@ -39,28 +39,15 @@ class MixtralLanguageModelingConfig(LanguageModelingConfig):
 
 @register_task("mixtral_language_modeling", dataclass=MixtralLanguageModelingConfig)
 class MixtralLanguageModelingTask(LanguageModelingTask):
-    """
-    基于Hugging Face上的Mixtral模型与tokenizer的语言模型任务。
-    该任务与language_modeling类似，但从HF的tokenizer中构建Dictionary。
-    """
 
     @classmethod
     def setup_dictionary(cls, args, **kwargs):
-        """
-        使用Hugging Face的Tokenizer来构建Fairseq的Dictionary。
-        """
         if not args.hf_model_name:
             raise ValueError("Must provide hf_model_name for Mixtral tokenizer")
 
-        # 加载HF tokenizer
         tokenizer = AutoTokenizer.from_pretrained(args.hf_model_name)
-        # 获取词表
         vocab = tokenizer.get_vocab()
-
-        # 构建 Fairseq Dictionary
         dictionary = Dictionary()
-        # vocab是{token: idx}，需要按index顺序插入token确保与tokenizer一致
-        # 注意：get_vocab()通常返回按词频排序的vocab，但为了安全，我们根据idx排序
         inv_vocab = sorted(vocab.items(), key=lambda x: x[1])
 
         for token, idx in inv_vocab:
@@ -78,9 +65,6 @@ class MixtralLanguageModelingTask(LanguageModelingTask):
 
     @classmethod
     def setup_task(cls, args, **kwargs):
-        """
-        覆盖setup_task以便使用Mixtral tokenizer构建dictionary。
-        """
         dictionary, output_dictionary = cls.setup_dictionary(args, **kwargs)
 
         # upgrade old checkpoints
@@ -103,11 +87,6 @@ class MixtralLanguageModelingTask(LanguageModelingTask):
     def load_dataset(
         self, split: str, epoch=1, combine=False, **kwargs
     ) -> MonolingualDataset:
-        """
-        加载数据集split并进行TokenBlock处理。
-        假设您的原始数据已通过Fairseq预处理为indexed dataset形式。
-        如果您需要用HF tokenizer重新分词原始文本，则需要在预处理时进行。
-        """
         paths = utils.split_paths(self.args.data)
         assert len(paths) > 0
 
@@ -167,11 +146,6 @@ class MixtralLanguageModelingTask(LanguageModelingTask):
         )
 
     def build_model(self, args):
-        """
-        在这里加载HF的Mistral模型（AutoModelForCausalLM）。
-        您需要在model文件中实现对应的Fairseq模型类（例如MixtralLMModel），
-        以适配Fairseq框架，并在build_model中实例化它。
-        """
         model = super().build_model(args)
         for target in self.targets:
             if target not in model.supported_targets:
@@ -181,20 +155,15 @@ class MixtralLanguageModelingTask(LanguageModelingTask):
         return model
 
     def build_dataset_for_inference(self, src_tokens, src_lengths, **kwargs):
-        """
-        为推理构建数据集，与language_modeling任务类似。
-        这里假设src_tokens已经是tensor形式的token序列。
-        """
         dataset = StripTokenDataset(
             TokenBlockDataset(
                 src_tokens,
                 src_lengths,
-                block_size=None,  # "eos"模式下此参数无效
+                block_size=None,
                 pad=self.source_dictionary.pad(),
                 eos=self.source_dictionary.eos(),
                 break_mode="eos",
             ),
-            # 移除目标序列末尾的eos
             self.source_dictionary.eos(),
         )
         src_dataset = PrependTokenDataset(
@@ -227,9 +196,6 @@ class MixtralLanguageModelingTask(LanguageModelingTask):
     def inference_step(
         self, generator, models, sample, prefix_tokens=None, constraints=None
     ):
-        """
-        基于给定的样本和模型进行推理，与language_modeling任务的实现类似。
-        """
         with torch.no_grad():
             if getattr(self.args, "add_bos_token", False):
                 bos_token = self.source_dictionary.bos()
@@ -262,9 +228,6 @@ class MixtralLanguageModelingTask(LanguageModelingTask):
         data_buffer_size: int = 10,
         context_window: int = 0,
     ):
-        """
-        为语言模型评估构建dataloader，类似于language_modeling中的eval_lm_dataloader实现。
-        """
         if context_window > 0:
             dataset = LMContextWindowDataset(
                 dataset=dataset,

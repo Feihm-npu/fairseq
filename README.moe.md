@@ -1,190 +1,305 @@
-# Training MoE language models
+# Fairseq benchmark
+- Steps to run fairseq code on the cluster:
+    1. Allocate an interactive GPU node with the following command: salloc -N 1 -n 8 -p mi1008x -t 24:00:00
+    2. Creating a python virtual env: python -m venv .venv
+    3. Activate the environment: source .venv/bin/activate
+    4. Following the docker steps:
+        - Torch:
+            - pip uninstall -y torch torchvision torchaudio
+            - pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/rocm5.7
+        - Fairseq dependencies:
+            - pip install fairscale==0.4.0
+            - pip install hydra-core==1.0.7 omegaconf==2.0.6
+        - Tutel:
+            - pip uninstall -y tutel
+            - git clone https://github.com/microsoft/tutel --branch main
+            - sed -i '1s/^/#define __HIP_PLATFORM_HCC__ /' tutel/tutel/custom/custom_kernel.cpp
+            - python ./tutel/setup.py install
+        - Apex:
+            - pip uninstall -y apex
+            - pip uninstall -y apex (to run twice to be sure)
+            - git clone https://github.com/ROCm/apex.git
+            - git checkout release/1.2.0
+            - python setup.py install --cpp_ext --cuda_ext
+        - pip install iopath pyarrow pandas argparse matplotlib
+        - Flash attention (never tried but could speedup the model):
+            - Follow instruction on https://github.com/ROCm/flash-attention
 
-## Dependencies
+## Model run related
+- Control the number of threads: export OMP_NUM_THREADS=4
+- pip install mkl-service==2.4.0 according to https://github.com/pytorch/pytorch/issues/37377
 
-Follow the fairseq installation instructions:
-https://github.com/pytorch/fairseq/#requirements-and-installation
+- CUDA_VISIBLE_DEVICES=0,1 rocprof --stats -o ./gpu2-1.csv fairseq-train data-bin/iwslt14.tokenized.de-en     --optimizer nag --lr 0.25 --clip-norm 0.1 --dropout 0.2 --max-tokens 4000     --arch fconv_iwslt_de_en --save-dir checkpoints/fconv --max-epoch 6 --ddp-backend fully_sharded --fp16
 
-The following package versions are recommended:
 
-apex:
+
+## Fairseq evalation on capacity
 ```bash
-pip install -v --no-cache-dir --global-option="--cpp_ext" \
-    --global-option="--cuda_ext" --global-option="--deprecated_fused_adam" \
-    --global-option="--xentropy" --global-option="--fast_multihead_attn" \
-    git+git://github.com/NVIDIA/apex.git@e2083df5eb96643c61613b9df48dd4eea6b07690
+#!/bin/bash
+module restore
+source /work1/amd/hongmfei/moespace/.moefair/bin/activate
+cd /work1/amd/hongmfei/moespace/SPEED-main/fairseq
+
+DATA_PATH=/work1/amd/hongmfei/raw_data/data-bin/wiki/
+MODEL_PATH=/work1/amd/hongmfei/models/en_moe_lm_15b/model.pt
+WORLD_SIZE=4
+export OMP_NUM_THREADS=4
+
+rm -rf *.npy
+RESULTS_FILE="evaluation_results_73.csv"
+echo "capacity,it/s,tokens/s,valid_loss,perplexity" > $RESULTS_FILE
+for capacity in $(seq 0.5 0.01 0.51); do
+  OUTPUT_FILE="output_${capacity}.log"
+  python -m fairseq_cli.eval_lm $DATA_PATH \
+    --ddp-backend fully_sharded \
+    --path $MODEL_PATH \
+    --fp16 \
+    --max-valid-steps 100 \
+    --batch-size 1 \
+    --gen-subset valid \
+    --bpe gpt2 \
+    --softmax-batch 2048 \
+    --tokens-per-sample 2048 \
+    --sample-break-mode none \
+    --is-moe \
+    --distributed-world-size $WORLD_SIZE \
+    --seed 100 \
+    --model-overrides "{'world_size': $WORLD_SIZE, 'moe_eval_capacity_token_fraction': $capacity}" \
+    &> $OUTPUT_FILE
+  evaluated_line=$(grep "Evaluated" $OUTPUT_FILE)
+  tokens=$(echo $evaluated_line | grep -Po "(?<=Evaluated )\d+")
+  total_time=$(echo $evaluated_line | grep -Po "(?<=tokens in )\d+\.\d+")
+  tokens_per_s=$(echo $evaluated_line | grep -Po "(?<=\()\d+\.\d+(?= tokens/s)")
+  valid_loss=$(grep -Po "(?<=valid Loss \(base 2\): )\d+\.\d+" $OUTPUT_FILE)
+  perplexity=$(grep -Po "(?<=Perplexity: )\d+\.\d+" $OUTPUT_FILE)
+  echo "$capacity,$tokens,$total_time,$tokens_per_s,$valid_loss,$perplexity" >> $RESULTS_FILE
+  echo "$capacity completed"
+  rm $OUTPUT_FILE
+done
+echo "All Steps completed."
 ```
 
-fairscale:
+## Fairseq communication quantization experiments
 ```bash
-pip install fairscale==0.4.0
-```
+module restore
+source /work1/amd/hongmfei/moespace/.moefair/bin/activate
+cd /work1/amd/hongmfei/moespace/SPEED-main/fairseq
+export PYTORCH_HIP_ALLOC_CONF=expandable_segments:True
 
-hydra:
-```bash
-pip install hydra-core==1.0.7 omegaconf==2.0.6
-```
+## To solve the missing module bugs
+FAIRSEQ_DIR=$(pip list -v | grep 'fairseq' | awk '{print $3}')
+export PYTHONPATH=$PYTHONPATH:$FAIRSEQ_DIR
 
-megatron (must be installed from source to get fused kernels):
-```bash
-git clone --depth=1 --branch v2.6 https://github.com/NVIDIA/Megatron-LM.git
-cd Megatron-LM
-pip install -e .
-```
-
-## Single-node training
-
-The following command will benchmark an MoE language model using synthetic data
-on 8 GPUs. The model has 8 experts (one per GPU) and 4.1B parameters total.
-
-```bash
-# set NUM_EXPERTS based on # of GPUs and desired # experts per GPU
-# generally it's recommended to have a single expert per GPU
-NUM_EXPERTS=8
-TOKENS_PER_SAMPLE=2048
-python fairseq_cli/train.py \
-  --ddp-backend fully_sharded --memory-efficient-fp16 --checkpoint-activations \
-  --task dummy_lm --tokens-per-sample $TOKENS_PER_SAMPLE \
-  --arch transformer_lm_gpt --share-decoder-input-output-embed \
-  --decoder-layers 24 --decoder-embed-dim 2048 --decoder-ffn-embed-dim 8192 \
-  --decoder-attention-heads 32 \
-  --moe-expert-count $NUM_EXPERTS --moe-freq 2 \
-  --moe-gating-use-fp32 --moe-second-expert-policy all \
-  --moe-normalize-expert-grad sqrt_world_size \
-  --moe-eval-capacity-token-fraction -1.0 \
-  --max-sentences-valid 1 --num-workers-valid 0 \
-  --criterion moe_cross_entropy --moe-gate-loss-wt 0.01 --moe-gate-loss-combine-method sum \
-  --optimizer adam --fp16-adam-stats --adam-betas '(0.9, 0.98)' --clip-norm 0.0 \
-  --lr 0.0005 --warmup-updates 750 \
-  --dropout 0.1 --attention-dropout 0.1 \
-  --batch-size 4 --update-freq 1 \
-  --max-update 250 --disable-validation \
-  --log-format json --log-interval 10
-```
-
-The total parameter count can be infered from the logs:
-```
-(...)
-2021-08-13 14:54:20 | INFO | fairseq_cli.train | num. non-expert model params: 908,423,168 (num. trained: 908,423,168)
-2021-08-13 14:54:20 | INFO | fairseq_cli.train | num. expert model params: 402,776,064 (num. trained: 402,776,064)
-(...)
-```
-The expert params are distinct on each GPU, so the total parameter count is `908M + 8 * 403M = 4.1B`
-
-**Sample output on 8 x V100:**
-```
-2021-08-13 14:58:39 | INFO | fairseq.modules.fused_bias_gelu | Done with compiling and loading fused kernels.
-2021-08-13 14:58:44 | INFO | fairseq.trainer | NOTE: gradient overflow detected, ignoring gradient, setting loss scale to: 64.0
-2021-08-13 14:58:49 | INFO | fairseq.trainer | NOTE: gradient overflow detected, ignoring gradient, setting loss scale to: 32.0
-2021-08-13 14:58:53 | INFO | fairseq.trainer | NOTE: gradient overflow detected, ignoring gradient, setting loss scale to: 16.0
-2021-08-13 14:59:32 | INFO | train_inner | {"epoch": 1, "update": 0.004, "loss": "20.714", "moe_gate_loss": "16.7217", "overflow_expert1": "20.84", "overflow_expert2": "53.493", "entropy_gating": "1.943", "expert1_balance_top": "66.521", "expert1_balance_bottom": "2.528", "unused_expert1_count": "0.12", "expert2_balance_top": "50.142", "expert2_balance_bottom": "5.417", "unused_expert2_count": "0.052", "all_to_all_cpu_time_ms": "0", "all_to_all_cuda_time_ms": "0", "inner_loss": "20.472", "ppl": "1.45489e+06", "wps": "16606.5", "ups": "0.25", "wpb": "65536", "bsz": "32", "num_updates": "10", "lr": "7.33333e-06", "gnorm": "30.01", "loss_scale": "16", "train_wall": "62", "cuda_gb_allocated": "10.4", "cuda_gb_reserved": "19", "cuda_gb_free": "21.4", "wall": "68"}
-2021-08-13 15:00:12 | INFO | train_inner | {"epoch": 1, "update": 0.007, "loss": "16.194", "moe_gate_loss": "15.642", "overflow_expert1": "16.52", "overflow_expert2": "59.608", "entropy_gating": "1.983", "expert1_balance_top": "63.168", "expert1_balance_bottom": "1.88", "unused_expert1_count": "0.564", "expert2_balance_top": "49.929", "expert2_balance_bottom": "3.712", "unused_expert2_count": "0.368", "all_to_all_cpu_time_ms": "0", "all_to_all_cuda_time_ms": "0", "inner_loss": "15.969", "ppl": "64132.9", "wps": "16591.9", "ups": "0.25", "wpb": "65536", "bsz": "32", "num_updates": "20", "lr": "1.4e-05", "gnorm": "1.82", "loss_scale": "16", "train_wall": "39", "cuda_gb_allocated": "10.4", "cuda_gb_reserved": "19", "cuda_gb_free": "21.4", "wall": "107"}
-2021-08-13 15:00:52 | INFO | train_inner | {"epoch": 1, "update": 0.011, "loss": "15.132", "moe_gate_loss": "13.3857", "overflow_expert1": "5.742", "overflow_expert2": "45.276", "entropy_gating": "2.023", "expert1_balance_top": "49.599", "expert1_balance_bottom": "5.064", "unused_expert1_count": "0.423", "expert2_balance_top": "40.013", "expert2_balance_bottom": "7.728", "unused_expert2_count": "0.32", "all_to_all_cpu_time_ms": "0", "all_to_all_cuda_time_ms": "0", "inner_loss": "14.939", "ppl": "31410.7", "wps": "16562", "ups": "0.25", "wpb": "65536", "bsz": "32", "num_updates": "30", "lr": "2.06667e-05", "gnorm": "1.397", "loss_scale": "16", "train_wall": "40", "cuda_gb_allocated": "10.4", "cuda_gb_reserved": "19", "cuda_gb_free": "21.4", "wall": "147"}
-```
-
-**Sample output on 8 x A100:**
-```
-2021-08-13 14:58:39 | INFO | fairseq.modules.fused_bias_gelu | Done with compiling and loading fused kernels.
-2021-08-13 22:10:38 | INFO | fairseq.trainer | NOTE: gradient overflow detected, ignoring gradient, setting loss scale to: 64.0
-2021-08-13 22:10:40 | INFO | fairseq.trainer | NOTE: gradient overflow detected, ignoring gradient, setting loss scale to: 32.0
-2021-08-13 22:10:43 | INFO | fairseq.trainer | NOTE: gradient overflow detected, ignoring gradient, setting loss scale to: 16.0
-2021-08-13 22:11:02 | INFO | train_inner | {"epoch": 1, "update": 0.004, "loss": "20.703", "moe_gate_loss": "16.7792", "overflow_expert1": "21.27", "overflow_expert2": "52.991", "entropy_gating": "1.943", "expert1_balance_top": "66.899", "expert1_balance_bottom": "2.586", "unused_expert1_count": "0.13", "expert2_balance_top": "50.174", "expert2_balance_bottom": "5.421", "unused_expert2_count": "0.066", "all_to_all_cpu_time_ms": "0", "all_to_all_cuda_time_ms": "0", "inner_loss": "20.461", "ppl": "1.44332e+06", "wps": "34799.2", "ups": "0.53", "wpb": "65536", "bsz": "32", "num_updates": "10", "lr": "7.33333e-06", "gnorm": "29.972", "loss_scale": "16", "train_wall": "49", "cuda_gb_allocated": "10.4", "cuda_gb_reserved": "20.6", "cuda_gb_free": "29.2", "wall": "68"}
-2021-08-13 22:11:21 | INFO | train_inner | {"epoch": 1, "update": 0.007, "loss": "16.195", "moe_gate_loss": "15.6466", "overflow_expert1": "16.589", "overflow_expert2": "59.311", "entropy_gating": "1.984", "expert1_balance_top": "63.15", "expert1_balance_bottom": "1.885", "unused_expert1_count": "0.548", "expert2_balance_top": "49.952", "expert2_balance_bottom": "3.785", "unused_expert2_count": "0.349", "all_to_all_cpu_time_ms": "0", "all_to_all_cuda_time_ms": "0", "inner_loss": "15.969", "ppl": "64151.2", "wps": "34973.5", "ups": "0.53", "wpb": "65536", "bsz": "32", "num_updates": "20", "lr": "1.4e-05", "gnorm": "1.822", "loss_scale": "16", "train_wall": "19", "cuda_gb_allocated": "10.4", "cuda_gb_reserved": "20.6", "cuda_gb_free": "29.2", "wall": "87"}
-2021-08-13 22:11:39 | INFO | train_inner | {"epoch": 1, "update": 0.011, "loss": "15.131", "moe_gate_loss": "13.3747", "overflow_expert1": "5.894", "overflow_expert2": "44.769", "entropy_gating": "2.024", "expert1_balance_top": "49.877", "expert1_balance_bottom": "5.076", "unused_expert1_count": "0.41", "expert2_balance_top": "39.921", "expert2_balance_bottom": "7.812", "unused_expert2_count": "0.343", "all_to_all_cpu_time_ms": "0", "all_to_all_cuda_time_ms": "0", "inner_loss": "14.938", "ppl": "31389.2", "wps": "35046.4", "ups": "0.53", "wpb": "65536", "bsz": "32", "num_updates": "30", "lr": "2.06667e-05", "gnorm": "1.396", "loss_scale": "16", "train_wall": "19", "cuda_gb_allocated": "10.4", "cuda_gb_reserved": "20.6", "cuda_gb_free": "29.2", "wall": "105"}
-```
-
-## Larger model on multiple nodes
-
-The following command will train an MoE model with 142B parameters on 64 A100s.
-
-```bash
-# salloc command might look different
-salloc --gpus-per-node 8 --ntasks-per-node 8 --cpus-per-task 12 --nodes 8 --mem-per-gpu 128G
-
-# set NUM_EXPERTS based on # of GPUs and desired # experts per GPU
-# generally it's recommended to have a single expert per GPU
-NUM_EXPERTS=64
-TOKENS_PER_SAMPLE=1024
-
-# we want 12 sequences per GPU. On <= 128 GPUs we can fit 6 sequences and use
-# gradient accumulation to reach this target.
-BATCH_SIZE=6
-GRAD_ACC=2
-
-# launch the job (adjust port and --cpu-bind if needed)
-DISTRIBUTED_PORT=12345
-srun --cpu-bind=mask_cpu:000000ffffff000000ffffff,000000ffffff000000ffffff,000000ffffff000000ffffff,000000ffffff000000ffffff,ffffff000000ffffff000000,ffffff000000ffffff000000,ffffff000000ffffff000000,ffffff000000ffffff000000 \
-  python fairseq_cli/train.py \
-  --distributed-port $DISTRIBUTED_PORT \
-  --ddp-backend fully_sharded --memory-efficient-fp16 --checkpoint-activations \
-  --task dummy_lm --tokens-per-sample $TOKENS_PER_SAMPLE \
-  --arch transformer_lm_gpt --share-decoder-input-output-embed \
-  --decoder-layers 32 --decoder-embed-dim 4096 --decoder-ffn-embed-dim 16384 \
-  --decoder-attention-heads 32 \
-  --moe-expert-count $NUM_EXPERTS --moe-freq 2 \
-  --moe-gating-use-fp32 --moe-second-expert-policy all \
-  --moe-normalize-expert-grad sqrt_world_size \
-  --moe-eval-capacity-token-fraction -1.0 \
-  --max-sentences-valid 1 --num-workers-valid 0 \
-  --criterion moe_cross_entropy --moe-gate-loss-wt 0.01 --moe-gate-loss-combine-method sum \
-  --optimizer adam --fp16-adam-stats --adam-betas '(0.9, 0.98)' --clip-norm 0.0 \
-  --lr 0.0005 --warmup-updates 750 \
-  --dropout 0.1 --attention-dropout 0.1 \
-  --batch-size $BATCH_SIZE --update-freq $GRAD_ACC \
-  --max-update 250 --disable-validation \
-  --log-format json --log-interval 10
-```
-
-#### Expected performance on IB interconnect
-
-NOTE: The words-per-second estimates below are before the Tutel optimizations
-introduced in [#3873](https://github.com/pytorch/fairseq/pull/3873). One should
-expect an additional 15-20% speedup from those optimizations.
-
-| num GPUs | num experts | batch size (x grad acc.) | words per second (wps) |
-| -- | -- | -- | -- |
-| 32 | 32 | 6 (x2) | 33k |
-| 64 | 64 | 6 (x2) | 82k |
-| 128 | 128 | 6 (x2) | 191k |
-| 512 | 512 | 12 (x1) | 638k |
-
-# Evaluating MoE language models
-
-#### Using `fairseq-eval-lm`
-
-The `fairseq-eval-lm` script can be used to score properly
-[preprocessed/binarized datasets](https://github.com/pytorch/fairseq/tree/moe/examples/language_model#1-preprocess-the-data),
-for example:
-
-```bash
-DATA_PATH=/path/to/data-bin
-MODEL_PATH=/path/to/model.pt
+DATA_PATH=/work1/amd/hongmfei/raw_data/data-bin/wiki/
+MODEL_PATH=/work1/amd/hongmfei/moespace/SPEED-main/fairseq/checkpoints-51200/checkpoint_last.pt
 python -m fairseq_cli.eval_lm \
-  $DATA_DIR
+  $DATA_PATH \
   --path $MODEL_PATH \
+  --ddp-backend fully_sharded \
   --gen-subset valid \
   --sample-break-mode none \
   --tokens-per-sample 2048 \
-  --batch-size 1 \
+  --batch-size 100 \
+  --softmax-batch 2048 \
+  --max-valid-steps 10 \
   --fp16 \
-  --output-word-probs \
   --is-moe \
-  --distributed-world-size 8 \
-  --model-overrides "{'world_size': 8, 'moe_eval_capacity_token_fraction': 0.05}"
+  --distributed-world-size 4 \
+  --model-overrides "{'world_size': 4, 'moe_eval_capacity_token_fraction': 0.05, 'dict-size': 50000}"
 ```
 
-#### Setting `moe_eval_capacity_token_fraction`
 
-When evaluating MoE models you may need to adjust the `--moe-eval-capacity-token-fraction`
-option to match or exceed the training capacity. The logic is somewhat unintuitive:
-* During training the capacity is set to `2 * math.ceil(local_bsz_in_tokens / global_num_experts)`
-* During inference the capacity is set to `math.ceil(args.moe_eval_capacity_token_fraction * local_bsz_in_tokens)`
+# Mixtral implementation
+### Preparation
+- Install editable version of the moe branch of Fairseq https://github.com/pytorch/fairseq/#requirements-and-installation
+- transformers, huggingface datasets
+    ```sh
+    pip install datasets
+    git clone https://github.com/huggingface/transformers.git
+    cd transformers
+    pip install -e .
+    ```
 
-For example, suppose you train a model with a batch size of 12 sequences per
-GPU, each of length 1024, and 512 experts. This model will have a capacity of
-48 during training (i.e., `2 * 12 * 1024 / 512`).
+## Mixtral and Qwen evaluation
+1. Replace the modeling_mixtral.py file @ transformers/src/transformers/models/mixtral/
+2. Repalce the modeling_qwen2_moe.py file @ transformers/src/transformers/models/qwen2_moe/
+3. Install lm-eval-harness
+    ```bash
+    git clone https://github.com/EleutherAI/lm-evaluation-harness.git
+    cd lm-evaluation-harness
+    pip install -e .
+    ```
+4. Evaluate the quantization method
+    - Mixtral
+    ```bash
+    #!/bin/bash
 
-Now suppose you want to match this setting at inference, but you are using
-fewer GPUs so have reduced the batch size to 1 sequence of length 1024. In that
-case you would want to set `--moe-eval-capacity-token-fraction=0.046875` (i.e., `1024 / 48`).
+    module restore
+    source /work1/amd/hongmfei/moespace/.moefair/bin/activate
+    cd /work1/amd/hongmfei/moespace/lm-evaluation-harness
+    LOG_DIR="$WORK"
+
+    # export PYTORCH_ROCM_ARCH="gfx1031"
+    # export HSA_OVERRIDE_GFX_VERSION=10.3.1
+    export AMD_SERIALIZE_KERNEL=3
+    export TORCH_USE_HIP_DSA=1
+
+    export PYTORCH_HIP_ALLOC_CONF=expandable_segments:True
+    export OMP_NUM_THREADS=64
+    TASKS=lambada_multilingual_stablelm
+    ## Qmode 0: origin 1: hot 2 all
+    # Qmode=1
+    # NumHotExperts=1
+    ## Qprec int8 int4 fp8 fp8base
+    # Qprec
+    ## hellaswag,lambada_multilingual_stablelm,mmlu,gsm8k,lambada_multilingual_stablelm,wmt16
+    ## lambada_openai_mt_stablelm_en
+    for Qmode in 1; do
+        for NumHotExperts in 1 2 3 4; do
+            for Qpre in int7 int6 int5; do
+                HIP_VISIBLE_DEVICES=0,1,2,3 lm_eval --model hf \
+                    --model_args pretrained=mistralai/Mixtral-8x7B-Instruct-v0.1,parallelize=True,Qmode=$Qmode,NumHotExperts=$NumHotExperts,Qpre=$Qpre \
+                    --tasks $TASKS \
+                    --output_path "mixtra_{$TASKS}_{$Qmode}_{$NumHotExperts}.json" \
+                    --device cuda \
+                    --limit 100 \
+                    --batch_size 64 &> "$LOG_DIR/lm-eval/mixtral_eval1218/mistral_{$TASKS}_Q{$Qmode}_hot{$NumHotExperts}_Qpref{$Qpre}.log"
+                echo "Task Qmode $Qmode Number of Hot Experts $NumHotExperts Quantize precision $Qpre completed!"
+            done
+        done
+    done
+    ```
+    - Qwen moe
+    ```sh
+    #!/bin/bash
+    module restore
+    source /work1/amd/hongmfei/moespace/.moefair/bin/activate
+    cd /work1/amd/hongmfei/moespace/lm-evaluation-harness
+    LOG_DIR="$WORK"
+    export PYTORCH_HIP_ALLOC_CONF=expandable_segments:True
+    export OMP_NUM_THREADS=64
+    TASKS=hellaswag
+    ## hellaswag,lambada_multilingual_stablelm,mmlu,gsm8k,lambada_multilingual_stablelm,wmt16,lambada_openai_mt_stablelm_en 
+    ## monology/pile-uncopyrighted
+    lm_eval --model hf \
+        --model_args pretrained=Qwen/Qwen1.5-MoE-A2.7B-Chat \
+        --tasks $TASKS \
+        --output_path "qwen_{$TASKS}.json" \
+        --device cuda \
+        --batch_size auto:1 &> "$LOG_DIR/lm-eval/qwen_{$TASKS}_hot_int8.log"
+    # ,parallelize=True
+    ```
+
+## Mixtral implementation
+- A simple version can be find in [hf_mixtral.py](../models/huggingface/hf_mixtral.py) where a task is registered and import the mixtral model from huggingface api. However, this is a non-parallelism implementation.
+- Expert parallelism implementation
+1. Define the mixtral layers, architecture and task
+    - [mixtral_layer.py](../models/mixtral_layer.py): all the functions are taken from transformers/src/transformers/models/mixtral/mixtral_modeling.py.
+    - [mixtral.py](../models/mixtral.py): wrap the moe layers and the experts
+    ```py
+    def fsdp_wrap_expert(args, layer, min_num_params=0):
+        process_group = layer.moe_layer.expert_group
+        for i, expert in enumerate(layer.moe_layer.experts):
+            layer.moe_layer.experts[i] = fsdp_wrap(expert, process_group=process_group, min_num_params=0)
+        layer = fsdp_wrap(layer, min_num_params=min_num_params)
+        return layer
+    ```
+    - [mixtral_lm.py](../models/mixtral_lm.py):
+    register the model and architechture
+    ```py
+    @register_model("mixtral_lm", dataclass=MixtralLanguageModelingConfig)
+    class MixtralLMModel(FairseqLanguageModel):
+        pass
+    @register_model_architecture("mixtral_lm", "mixtral_lm_arch")
+    def mixtral_lm_arch(args):
+        pass
+    ```
+    - [mixtral_language_modeling.py](../tasks/mixtral_language_modeling.py)
+    ```py
+    @register_task("mixtral_language_modeling", dataclass=MixtralLanguageModelingConfig)
+    class MixtralLanguageModelingTask(LanguageModelingTask):
+        pass
+    ### load the tokenizer to get the word dictionary
+    tokenizer = AutoTokenizer.from_pretrained(args.hf_model_name)
+    vocab = tokenizer.get_vocab()
+    dictionary = Dictionary()
+    ```
+2. train the model
+    ```bash
+    module restore
+    source /work1/amd/hongmfei/moespace/.moefair/bin/activate
+    cd /work1/amd/hongmfei/moespace/SPEED-main/fairseq
+    export PYTORCH_HIP_ALLOC_CONF=expandable_segments:True
+    ## To solve the missing module bugs
+    FAIRSEQ_DIR=$(pip list -v | grep 'fairseq' | awk '{print $3}')
+    export PYTHONPATH=$PYTHONPATH:$FAIRSEQ_DIR
+    DATA_PATH=/work1/amd/hongmfei/raw_data/data-bin/wiki/
+    NUM_EXPERTS=4
+    TOKENS_PER_SAMPLE=2048
+    python fairseq_cli/train.py \
+    --ddp-backend fully_sharded --memory-efficient-fp16 --checkpoint-activations \
+    $DATA_PATH \
+    --task language_modeling --tokens-per-sample $TOKENS_PER_SAMPLE \
+    --arch mixtral_v1 --share-decoder-input-output-embed \
+    --decoder-layers 32 --decoder-embed-dim 4096 --decoder-ffn-embed-dim 14336 \
+    --decoder-attention-heads 64 \
+    --moe-expert-count $NUM_EXPERTS --moe-freq 1 \
+    --moe-gating-use-fp32 --moe-second-expert-policy all \
+    --moe-normalize-expert-grad sqrt_world_size \
+    --moe-eval-capacity-token-fraction -1.0 \
+    --max-sentences-valid 1 --num-workers-valid 0 \
+    --criterion moe_cross_entropy --moe-gate-loss-wt 0.01 --moe-gate-loss-combine-method sum \
+    --optimizer adam --fp16-adam-stats --adam-betas '(0.9, 0.98)' --clip-norm 0.0 \
+    --lr 0.0005 --warmup-updates 750 \
+    --dropout 0.1 --attention-dropout 0.1 \
+    --batch-size 4 --update-freq 1 \
+    --max-update 1000 --disable-validation \
+    --log-format json --log-interval 10 \
+    --save-dir /work1/amd/hongmfei/moespace/SPEED-main/fairseq/checkpoints-mixtralv1 \
+    --restore-file /work1/amd/hongmfei/moespace/SPEED-main/fairseq/checkpoints-mixtralv1/checkpoint_last.pt
+    ```
+3. inference
+    ```bash
+    module restore
+    source /work1/amd/hongmfei/moespace/.moefair/bin/activate
+    cd /work1/amd/hongmfei/moespace/SPEED-main/fairseq
+    export PYTORCH_HIP_ALLOC_CONF=expandable_segments:True
+
+    ## To solve the missing module bugs
+    FAIRSEQ_DIR=$(pip list -v | grep 'fairseq' | awk '{print $3}')
+    export PYTHONPATH=$PYTHONPATH:$FAIRSEQ_DIR
+
+    DATA_PATH=/work1/amd/hongmfei/raw_data/data-bin/wiki/
+    MODEL_PATH=/work1/amd/hongmfei/moespace/SPEED-main/fairseq/checkpoints-51200/checkpoint_last.pt
+    python -m fairseq_cli.eval_lm \
+    $DATA_PATH \
+    --path $MODEL_PATH \
+    --ddp-backend fully_sharded \
+    --gen-subset valid \
+    --sample-break-mode none \
+    --tokens-per-sample 2048 \
+    --batch-size 100 \
+    --softmax-batch 2048 \
+    --max-valid-steps 10 \
+    --fp16 \
+    --is-moe \
+    --distributed-world-size 4 \
+    --model-overrides "{'world_size': 4, 'moe_eval_capacity_token_fraction': 0.05, 'dict-size': 50000}"
+    ```
+    
+### For reference -- Transformer Structure for Language Models
+- [tranformer_lm.py](../models/transformer_lm.py) --> [transformer.py](../models/transformer.py) --> [transformer_layer.py](../modules/transformer_layer.py)
+- [tranformer_lm.py](../models/transformer_lm.py) registers the model and model structure
+    - **class transfoermerLanguageModel()** build a new model instance
+    ```python
+    decoder = TransformerDecoder(
+            args, task.target_dictionary, embed_tokens, no_encoder_attn=True,
+        )
+    ```
+    - different architecture initialize different hyperparameters
+- [transformer.py](../models/transformer.py)
+    - build the decoder layer and wrap with fsdp **fsdp_wrap_expert**
+
+- [transformer_layer.py](../modules/transformer_layer.py)
+    - Define the **TransformerDecoderLayer** inherented from **nn.Module**
 

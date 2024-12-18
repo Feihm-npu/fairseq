@@ -10,10 +10,7 @@ from .mixtral_layer import MixtralDecoderLayer, MixtralRMSNorm
 DEFAULT_MIN_PARAMS_TO_WRAP = int(1e8)
 
 def fsdp_wrap_expert(args, layer, min_num_params=0):
-    """
-    对MOE层的专家进行FSDP wrap的逻辑放在这里。
-    假设layer.moe_layer.experts存在，以及layer.moe_layer.expert_group存在。
-    """
+
     process_group = layer.moe_layer.expert_group
     for i, expert in enumerate(layer.moe_layer.experts):
         layer.moe_layer.experts[i] = fsdp_wrap(expert, process_group=process_group, min_num_params=0)
@@ -27,9 +24,7 @@ def build_mixtral_decoder(args, task):
     return decoder
 
 class MixtralDecoder(FairseqDecoder):
-    """
-    类似TransformerDecoder的逻辑，但使用Mixtral相关结构。
-    """
+
 
     def __init__(self, args, dictionary, embed_tokens, no_encoder_attn=False):
         super().__init__(dictionary)
